@@ -34,12 +34,12 @@ export class UserRegistrationService {
 
   //Get all movies endpoint
 
-  public getAllMovies(movieDetails: any): Observable<any> {
+  public getAllMovies(): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + token,
     });
-    return this.http.get(apiUrl + 'movies', movieDetails)
+    return this.http.get(apiUrl + 'movies', { headers })
         .pipe(catchError(this.handleError));
     }
 
