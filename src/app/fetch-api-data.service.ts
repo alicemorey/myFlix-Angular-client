@@ -26,6 +26,11 @@ export class UserRegistrationService {
   }
 
   // User login endpoint
+  public userLogin(userDetails: any): Observable<any> {
+    return this.http.post(apiUrl + 'login', userDetails).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   //Get all movies endpoint
 
