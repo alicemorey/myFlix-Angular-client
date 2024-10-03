@@ -12,19 +12,20 @@ var platform_browser_1 = require("@angular/platform-browser");
 var animations_1 = require("@angular/platform-browser/animations");
 var forms_1 = require("@angular/forms");
 var http_1 = require("@angular/common/http");
+var router_1 = require("@angular/router");
 var input_1 = require("@angular/material/input");
 var button_1 = require("@angular/material/button");
 var card_1 = require("@angular/material/card");
-var router_1 = require("@angular/router");
 var form_field_1 = require("@angular/material/form-field");
 var dialog_1 = require("@angular/material/dialog");
 var snack_bar_1 = require("@angular/material/snack-bar");
+var icon_1 = require("@angular/material/icon");
 var app_component_1 = require("./app.component");
 var user_registration_form_component_1 = require("./user-registration-form/user-registration-form.component");
 var user_login_form_component_1 = require("./user-login-form/user-login-form.component");
 var movie_card_component_1 = require("./movie-card/movie-card.component");
 var welcome_page_component_1 = require("./welcome-page/welcome-page.component");
-var icon_1 = require("@angular/material/icon");
+var async_1 = require("@angular/platform-browser/animations/async");
 var appRoutes = [
     { path: 'welcome', component: welcome_page_component_1.WelcomePageComponent },
     { path: 'movies', component: movie_card_component_1.MovieCardComponent },
@@ -56,7 +57,9 @@ var AppModule = /** @class */ (function () {
                 icon_1.MatIconModule,
                 router_1.RouterModule.forRoot(appRoutes)
             ],
-            providers: [],
+            providers: [
+                async_1.provideAnimationsAsync()
+            ],
             bootstrap: [app_component_1.AppComponent]
         })
     ], AppModule);
