@@ -4,21 +4,22 @@
     Welcome to myFlix!
   </h1>
   <button
-    Mat-raised-button
-    (click)="openUserRegistrationDialog()"
-    style="margin-right: 10px;"
+    mat-card-button
     color="primary"
+    (click)="openUserRegistrationDialog()"
+  
   >
     Sign Up
   </button>
-  <button mat-raised-button 
-  (click)="openUserLoginDialog()">Login</button>
+
   <button
     mat-raised-button
     color="primary"
+    (click)="openUserLoginDialog()"
   >
     Login
   </button>
+
   <button
     mat-raised-button
     color="primary"
@@ -26,4 +27,5 @@
   >
     All Movies
   </button>
+
 </div>
