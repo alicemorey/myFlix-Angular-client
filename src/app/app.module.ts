@@ -15,9 +15,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AppComponent } from './app.component';
 import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
 import { UserLoginFormComponent } from './user-login-form/user-login-form.component';
+import { MovieCardComponent} from './movie-card/movie-card.component';
 
 @NgModule({
-  declarations: [AppComponent, UserRegistrationFormComponent, UserLoginFormComponent],
+  declarations: [AppComponent, UserRegistrationFormComponent, UserLoginFormComponent, MovieCardComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
