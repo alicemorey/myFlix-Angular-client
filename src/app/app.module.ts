@@ -18,17 +18,23 @@ import { UserLoginFormComponent } from './user-login-form/user-login-form.compon
 import { MovieCardComponent} from './movie-card/movie-card.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 
-const appRoutes:Routes =[
-  {path: 'welome', component:WelcomePageComponent},
+const appRoutes: Routes =[
+  {path: 'welcome', component: WelcomePageComponent},
   {path: 'movies', component: MovieCardComponent},
   {path: '', redirectTo: 'welcome', pathMatch:'prefix'},
 
 ];
 
 @NgModule({
-  declarations: [AppComponent, UserRegistrationFormComponent, UserLoginFormComponent, MovieCardComponent],
+  declarations: [
+    AppComponent, 
+    UserRegistrationFormComponent, 
+    UserLoginFormComponent, 
+    MovieCardComponent, 
+    WelcomePageComponent],
+
   imports: [
-    RouterModule.forRoot (appRoutes),
+    
     BrowserModule,
     HttpClientModule,
     FormsModule,
@@ -39,6 +45,7 @@ const appRoutes:Routes =[
     MatFormFieldModule,
     MatDialogModule,
     MatSnackBarModule,
+    RouterModule.forRoot (appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]
