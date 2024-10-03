@@ -12,6 +12,7 @@ import { MessageBoxComponent } from '../message-box/message-box.component';
 })
 export class MovieCardComponent implements OnInit {
   movies: any[] = [];
+  favoriteMovies: any[] = [];
 
   constructor(
     public fetchApiData:UserRegistrationService,
@@ -21,6 +22,7 @@ export class MovieCardComponent implements OnInit {
 
 ngOnInit(): void {
   this.getMovies();
+  this.getFavoriteMovies();
 }
 
 getMovies(): void {
@@ -38,9 +40,40 @@ getMovies(): void {
     })
   }
 
+  getFavoriteMovies(): void {
+    this.fetchApiData.getUser().subscribe((resp: any) => {
+      this.favoriteMovies = resp.favoriteMovies;
+      console.log(this.favoriteMovies);
+      return this.favoriteMovies;
+    })
+  }
+
+  isFavorite(movie: any): boolean {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user.FavoriteMovies && user.FavoriteMovies.includes(movie._id);
+  }
+  
+
+  toggleFavorite(movie:any): void {
+    if (this.isFavorite(movie)) {
+      this.fetchApiData.deleteFavoriteMovie(movie._id).subscribe((resp: any) => {
+        this.getFavoriteMovies();
+      })
+    } else {
+      this.fetchApiData.addFavoriteMovie(movie._id).subscribe((resp: any) => {
+        this.getFavoriteMovies();
+      })
+    }
+  }
+
   logout(): void {
     this.router.navigate(["welcome"]);
     localStorage.removeItem("user");
+
+}
+
+  redirectProfile(): void {
+  this.router.navigate(["profile"]);
 }
 
 openGenreDialog(movie:any): void {
@@ -71,13 +104,5 @@ openSynopsisDialog(movie:any): void {
     },
     width: '350px'
   });
-}
-
-addToFavorites(movieId:string): void {
-  this.fetchApiData.addFavoriteMovie(movieId).subscribe((resp: any) => {
-    console.log(resp);
-    this.ngOnInit();
-  })
-
 }
 }

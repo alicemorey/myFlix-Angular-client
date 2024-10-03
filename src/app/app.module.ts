@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,7 +20,7 @@ import { UserLoginFormComponent } from './user-login-form/user-login-form.compon
 import { MovieCardComponent} from './movie-card/movie-card.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-
+import { MessageBoxComponent } from './message-box/message-box.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 const appRoutes: Routes =[
@@ -37,7 +38,8 @@ const appRoutes: Routes =[
     UserLoginFormComponent, 
     MovieCardComponent, 
     WelcomePageComponent,
-    UserProfileComponent
+    UserProfileComponent, 
+    MessageBoxComponent
 ],
 
   imports: [
@@ -53,7 +55,7 @@ const appRoutes: Routes =[
     MatDialogModule,
     MatSnackBarModule,
     MatIconModule,
-    RouterModule.forRoot (appRoutes)
+    RouterModule.forRoot (appRoutes),
   ],
   providers: [
     provideAnimationsAsync()

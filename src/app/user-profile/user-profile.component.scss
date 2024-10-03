@@ -1,0 +1,27 @@
+
+mat-card {
+    background-color: #9fcbfa;
+    color: chocolate;
+  }
+  
+  body {
+    background-color: #9fcbfa;
+    color: chocolate;
+  }
+
+  nav {
+    background-color: #f6c5c7;
+    color: chocolate;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .menu {
+    a {
+      color: chocolate;
+      
+      &:hover {
+        color: blue;
+      }
+    }
+  }
+  

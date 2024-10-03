@@ -26,6 +26,7 @@ var user_login_form_component_1 = require("./user-login-form/user-login-form.com
 var movie_card_component_1 = require("./movie-card/movie-card.component");
 var welcome_page_component_1 = require("./welcome-page/welcome-page.component");
 var user_profile_component_1 = require("./user-profile/user-profile.component");
+var message_box_component_1 = require("./message-box/message-box.component");
 var async_1 = require("@angular/platform-browser/animations/async");
 var appRoutes = [
     { path: 'welcome', component: welcome_page_component_1.WelcomePageComponent },
@@ -44,7 +45,8 @@ var AppModule = /** @class */ (function () {
                 user_login_form_component_1.UserLoginFormComponent,
                 movie_card_component_1.MovieCardComponent,
                 welcome_page_component_1.WelcomePageComponent,
-                user_profile_component_1.UserProfileComponent
+                user_profile_component_1.UserProfileComponent,
+                message_box_component_1.MessageBoxComponent
             ],
             imports: [
                 platform_browser_1.BrowserModule,
@@ -58,7 +60,7 @@ var AppModule = /** @class */ (function () {
                 dialog_1.MatDialogModule,
                 snack_bar_1.MatSnackBarModule,
                 icon_1.MatIconModule,
-                router_1.RouterModule.forRoot(appRoutes)
+                router_1.RouterModule.forRoot(appRoutes),
             ],
             providers: [
                 async_1.provideAnimationsAsync()

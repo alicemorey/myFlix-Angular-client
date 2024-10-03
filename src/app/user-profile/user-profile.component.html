@@ -1,1 +1,67 @@
-<p>user-profile works!</p>
+<mat-card>
+  <nav class="menu">
+    <ul>
+      <a routerLink="/welcome">Home</a>
+      <a routerLink="/movies">Movies</a>
+      <a routerLink="/profile">Profile</a>
+    </ul>
+  </nav>
+    <mat-card-header>
+      <mat-card-title>User Profile</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form>
+        <mat-form-field>
+          <input
+            matInput
+            [(ngModel)]="userData.username"
+            placeholder="Username"
+            name="Username"
+            required
+          >
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            [(ngModel)]="userData.email"
+            type="email"
+            placeholder="Email"
+            name="Email"
+            required
+          >
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            [(ngModel)]="userData.birthday"
+            type="date"
+            placeholder="Birthday"
+            name="Birthday"
+          >
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button (click)="updateUser()" color="primary">Update</button>
+      <button mat-raised-button (click)="resetUser()" color="warn">Reset</button>
+    </mat-card-actions>
+  </mat-card>
+  
+  <mat-card>
+    <mat-card-title>Favorite Movies</mat-card-title>
+    <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutGap="20px">
+        <mat-card *ngFor="let movie of favoriteMovies" style="width: 200px; margin-bottom: 20px;">
+          <img mat-card-image [src]="movie.imagePath" [alt]="movie.title">
+          <mat-card-title>{{movie.title}}</mat-card-title>
+          <mat-card-actions>
+            <button mat-button (click)="removeFromFavorite(movie)">Remove</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  
+  <button mat-raised-button (click)="logOut()" color="primary">Logout</button>
+  <button mat-raised-button (click)="backToMovie()" color="accent">Back to Movies</button>
+  

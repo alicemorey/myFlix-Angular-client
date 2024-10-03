@@ -1,1 +1,22 @@
-<p>message-box works!</p>
+<mat-card>
+    <mat-card-header>
+    <div mat-card-title 
+            class="messageBoxtitle">
+            {{data.title}}</div>
+    </mat-card-header>
+    <div mat-card-content 
+        class="messageboxcontent">
+        {{data.content}}
+    </div>
+    <mat-card-actions>
+        <button
+        mat-raised-button
+        (click)="closeMessageBox()"
+        color="secondary"
+        >
+        Close
+        </button>
+    </mat-card-actions>
+</mat-card>
+
+

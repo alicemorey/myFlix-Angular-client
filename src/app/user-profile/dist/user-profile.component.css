@@ -15,7 +15,7 @@ nav {
 }
 
 .menu a {
-  color: var(chocolate);
+  color: chocolate;
 }
 .menu a:hover {
   color: blue;

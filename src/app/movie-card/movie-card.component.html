@@ -1,4 +1,11 @@
 <div style="display: flex;">
+    <nav class="menu">
+        <ul>
+          <a routerLink="/welcome">Home</a>
+          <a routerLink="/movies">Movies</a>
+          <a routerLink="/profile">Profile</a>
+        </ul>
+      </nav>
 
     <mat-card *ngFor="let movie of movies;" style="flex: 1 1 300px; margin: 10px;">
         <mat-card-header>
@@ -26,17 +33,17 @@
             <button
                 mat-button
                 color="primary"
-                (click)="openSynopsisDialog(movie)"
+                (click)="openSynopsisDialog(movie.Description)"
             >
                 Synopsis
             </button>
-            <button 
-            mat-icon-button 
-            color="warn" 
-            (click)="addToFavorites(movie._id)"
+            <button
+            mat-icon-button
+            (click)="toggleFavorite(movie)"
             >
-            </button>
-            <mat-icon>favorite_border</mat-icon>
+            <mat-icon>{{ isFavorite(movie) ? 'favorite' : 'favorite_border' }}</mat-icon>
+    </button>
+            
         </mat-card-actions>
     </mat-card>
 </div>

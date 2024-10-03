@@ -9,27 +9,53 @@ exports.__esModule = true;
 exports.UserProfileComponent = void 0;
 var core_1 = require("@angular/core");
 var UserProfileComponent = /** @class */ (function () {
-    function UserProfileComponent(userService) {
+    function UserProfileComponent(userService, router) {
         this.userService = userService;
-        this.user = {};
+        this.router = router;
+        this.userData = {
+            username: '',
+            password: '',
+            email: '',
+            birthday: ''
+        };
+        this.favoriteMovies = [];
     }
     UserProfileComponent.prototype.ngOnInit = function () {
         this.getUser();
+        this.getFavoriteMovies();
     };
     UserProfileComponent.prototype.getUser = function () {
         var _this = this;
         this.userService.getUser().subscribe(function (response) {
-            _this.user = response;
-        }, function (error) {
-            console.error('Error fetching user:', error);
+            _this.userData = response;
+        });
+    };
+    UserProfileComponent.prototype.getFavoriteMovies = function () {
+        var _this = this;
+        this.userService.getFavoriteMovies().subscribe(function (movies) {
+            _this.favoriteMovies = movies;
         });
     };
     UserProfileComponent.prototype.updateUser = function () {
-        this.userService.editUser(this.user).subscribe(function (response) {
+        this.userService.editUser(this.userData).subscribe(function () {
             console.log('User updated successfully');
-        }, function (error) {
-            console.error('Error updating user:', error);
         });
+    };
+    UserProfileComponent.prototype.resetUser = function () {
+        this.getUser();
+    };
+    UserProfileComponent.prototype.backToMovie = function () {
+        this.router.navigate(['/movies']);
+    };
+    UserProfileComponent.prototype.removeFromFavorite = function (movie) {
+        var _this = this;
+        this.userService.deleteFavoriteMovie(movie._id).subscribe(function () {
+            _this.getFavoriteMovies();
+        });
+    };
+    UserProfileComponent.prototype.logOut = function () {
+        localStorage.clear();
+        this.router.navigate(['/welcome']);
     };
     UserProfileComponent = __decorate([
         core_1.Component({

@@ -15,9 +15,11 @@ var MovieCardComponent = /** @class */ (function () {
         this.router = router;
         this.dialog = dialog;
         this.movies = [];
+        this.favoriteMovies = [];
     }
     MovieCardComponent.prototype.ngOnInit = function () {
         this.getMovies();
+        this.getFavoriteMovies();
     };
     MovieCardComponent.prototype.getMovies = function () {
         var _this = this;
@@ -33,9 +35,37 @@ var MovieCardComponent = /** @class */ (function () {
             console.log(err);
         });
     };
+    MovieCardComponent.prototype.getFavoriteMovies = function () {
+        var _this = this;
+        this.fetchApiData.getUser().subscribe(function (resp) {
+            _this.favoriteMovies = resp.favoriteMovies;
+            console.log(_this.favoriteMovies);
+            return _this.favoriteMovies;
+        });
+    };
+    MovieCardComponent.prototype.isFavorite = function (movie) {
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
+        return user.FavoriteMovies && user.FavoriteMovies.includes(movie._id);
+    };
+    MovieCardComponent.prototype.toggleFavorite = function (movie) {
+        var _this = this;
+        if (this.isFavorite(movie)) {
+            this.fetchApiData.deleteFavoriteMovie(movie._id).subscribe(function (resp) {
+                _this.getFavoriteMovies();
+            });
+        }
+        else {
+            this.fetchApiData.addFavoriteMovie(movie._id).subscribe(function (resp) {
+                _this.getFavoriteMovies();
+            });
+        }
+    };
     MovieCardComponent.prototype.logout = function () {
         this.router.navigate(["welcome"]);
         localStorage.removeItem("user");
+    };
+    MovieCardComponent.prototype.redirectProfile = function () {
+        this.router.navigate(["profile"]);
     };
     MovieCardComponent.prototype.openGenreDialog = function (movie) {
         this.dialog.open(message_box_component_1.MessageBoxComponent, {
@@ -62,13 +92,6 @@ var MovieCardComponent = /** @class */ (function () {
                 content: movie.description
             },
             width: '350px'
-        });
-    };
-    MovieCardComponent.prototype.addToFavorites = function (movieId) {
-        var _this = this;
-        this.fetchApiData.addFavoriteMovie(movieId).subscribe(function (resp) {
-            console.log(resp);
-            _this.ngOnInit();
         });
     };
     MovieCardComponent = __decorate([
