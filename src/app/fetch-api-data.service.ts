@@ -14,8 +14,7 @@ const apiUrl = 'https://myflix-movies2024-b07bf2b16bbc.herokuapp.com/';
 export class UserRegistrationService {
   // Inject the HttpClient module to the constructor params
  // This will provide HttpClient to the entire class, making it available via this.http
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
  // Making the api call for the user registration endpoint
   public userRegistration(userDetails: any): Observable<any> {
@@ -31,7 +30,7 @@ export class UserRegistrationService {
       catchError(this.handleError)
     );
   }
-
+  
   //Get all movies endpoint
 
   public getAllMovies(): Observable<any> {
