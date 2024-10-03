@@ -25,10 +25,12 @@ var user_registration_form_component_1 = require("./user-registration-form/user-
 var user_login_form_component_1 = require("./user-login-form/user-login-form.component");
 var movie_card_component_1 = require("./movie-card/movie-card.component");
 var welcome_page_component_1 = require("./welcome-page/welcome-page.component");
+var user_profile_component_1 = require("./user-profile/user-profile.component");
 var async_1 = require("@angular/platform-browser/animations/async");
 var appRoutes = [
     { path: 'welcome', component: welcome_page_component_1.WelcomePageComponent },
     { path: 'movies', component: movie_card_component_1.MovieCardComponent },
+    { path: 'profile', component: user_profile_component_1.UserProfileComponent },
     { path: '', redirectTo: 'welcome', pathMatch: 'prefix' },
 ];
 var AppModule = /** @class */ (function () {
@@ -41,7 +43,8 @@ var AppModule = /** @class */ (function () {
                 user_registration_form_component_1.UserRegistrationFormComponent,
                 user_login_form_component_1.UserLoginFormComponent,
                 movie_card_component_1.MovieCardComponent,
-                welcome_page_component_1.WelcomePageComponent
+                welcome_page_component_1.WelcomePageComponent,
+                user_profile_component_1.UserProfileComponent
             ],
             imports: [
                 platform_browser_1.BrowserModule,
