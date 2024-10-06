@@ -42,7 +42,7 @@ var UserRegistrationService = /** @class */ (function () {
     // Get a single movie endpoint
     UserRegistrationService.prototype.getOneMovie = function (movieId) {
         var token = localStorage.getItem('token');
-        return this.http.get(apiUrl + 'movies/' + movieId, {
+        return this.http.get(apiUrl + "movies/" + movieId, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })
@@ -96,10 +96,20 @@ var UserRegistrationService = /** @class */ (function () {
             })
         }).pipe(operators_1.catchError(this.handleError));
     };
+    //delete favorite movie endpoint
+    UserRegistrationService.prototype.deleteFavoriteMovie = function (username, movieId) {
+        var token = localStorage.getItem('token');
+        return this.http["delete"](apiUrl + "users/" + username + "/movies/" + movieId, {
+            headers: new http_1.HttpHeaders({
+                Authorization: 'Bearer ' + token
+            })
+        }).pipe(operators_1.catchError(this.handleError));
+    };
     //edit user endpoint
     UserRegistrationService.prototype.editUser = function (userDetails) {
         var token = localStorage.getItem('token');
-        return this.http.put(apiUrl + 'users/' + userDetails, {
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
+        return this.http.put(apiUrl + "users/" + user.Username, userDetails, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })
@@ -109,15 +119,6 @@ var UserRegistrationService = /** @class */ (function () {
     UserRegistrationService.prototype.deleteUser = function () {
         var token = localStorage.getItem('token');
         return this.http["delete"](apiUrl + 'users', {
-            headers: new http_1.HttpHeaders({
-                Authorization: 'Bearer ' + token
-            })
-        }).pipe(operators_1.catchError(this.handleError));
-    };
-    //delete favorite movie endpoint
-    UserRegistrationService.prototype.deleteFavoriteMovie = function (movieId) {
-        var token = localStorage.getItem('token');
-        return this.http["delete"](apiUrl + 'users/' + movieId, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })

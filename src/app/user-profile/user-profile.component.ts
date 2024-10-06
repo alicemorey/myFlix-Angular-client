@@ -37,24 +37,35 @@ export class UserProfileComponent implements OnInit {
   }
 
   getFavoriteMovies(): void {
-    this.userService.getFavoriteMovies().subscribe((moviesIds: any[]) => {
-      console.log('Favorite movies IDs:', moviesIds);
-      this.favoriteMovies = [];
-      moviesIds.forEach(id => {
-        this.userService.getOneMovie(id).subscribe((movie: any) => {
-          this.favoriteMovies.push(movie);
-        });
-      });
-
-    });
-  }
+    this.userService.getFavoriteMovies().subscribe((movies: any[]) => {
+      console.log('Favorite movies :', movies);
+      this.favoriteMovies = movies.filter(movie => movie && movie.ImagePath);
+    },
+    error => {
+      console.error('Error fetching favorite movies:', error);
+    }
+  );
+}
   
 
   updateUser(): void {
-    this.userService.editUser(this.userData).subscribe(() => {
-      console.log('User updated successfully');
-    });
+    this.userService.editUser(this.userData).subscribe(
+      (updatedUser: any) => {
+        this.snackBar.open('User profile updated successfully', 'OK', {
+          duration: 2000
+        });
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        this.getUser(); // refresh user data
+      },
+      (error) => {
+        this.snackBar.open('Failed to update user profile', 'OK', {
+          duration: 2000
+        });
+        console.error('Error updating user:', error);
+      }
+    );
   }
+  
 
   resetUser(): void {
     this.getUser();
@@ -63,15 +74,16 @@ export class UserProfileComponent implements OnInit {
   backToMovie(): void {
     this.router.navigate(['/movies']);
   }
-
   removeFromFavorites(movieId: string): void {
-    this.userService.deleteFavoriteMovie(movieId).subscribe(() => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.userService.deleteFavoriteMovie(user.Username, movieId).subscribe(() => {
       this.snackBar.open('Movie removed from favorites', 'OK', {
         duration: 2000
       });
       this.getFavoriteMovies();
     });
   }
+  
   
 
   logOut(): void {

@@ -45,7 +45,7 @@ export class UserRegistrationService {
   // Get a single movie endpoint
   public getOneMovie(movieId: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + 'movies/' + movieId, {
+    return this.http.get(`${apiUrl}movies/${movieId}`, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -53,6 +53,7 @@ export class UserRegistrationService {
       catchError(this.handleError)
     );
   }
+  
 
   // get director endpoint
   public getDirector(directorName: string): Observable<any> {
@@ -123,10 +124,10 @@ export class UserRegistrationService {
   }
   
 
-  //edit user endpoint
-  public editUser(userDetails: any): Observable<any> {
+  //delete favorite movie endpoint
+  public deleteFavoriteMovie(username: string, movieId: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.put(apiUrl + 'users/' + userDetails, {
+    return this.http.delete(`${apiUrl}users/${username}/movies/${movieId}`, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -134,6 +135,20 @@ export class UserRegistrationService {
       catchError(this.handleError)
     );
   }
+
+  //edit user endpoint
+  public editUser(userDetails: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return this.http.put(`${apiUrl}users/${user.Username}`, userDetails, {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ' + token,
+      })
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+  
 
   //delete user
   public deleteUser(): Observable<any> {
@@ -146,18 +161,7 @@ export class UserRegistrationService {
       catchError(this.handleError)
     );
   }
-
-  //delete favorite movie endpoint
-  public deleteFavoriteMovie(movieId: string): Observable<any> {
-    const token = localStorage.getItem('token');
-    return this.http.delete(apiUrl + 'users/' + movieId, {
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-      })
-    }).pipe(
-      catchError(this.handleError)
-    );
-  }
+  
 
   // handle API errors
   private handleError(error: HttpErrorResponse): any {

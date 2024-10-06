@@ -37,19 +37,23 @@
       <mat-card class="favorites-card">
         <mat-card-title>Favorite Movies</mat-card-title>
         <mat-card-content>
-          <mat-grid-list cols="2" rowHeight="350px" gutterSize="16px">
+          <mat-grid-list cols="2" rowHeight="350px" gutterSize="16px" *ngIf="favoriteMovies.length > 0">
             <mat-grid-tile *ngFor="let movie of favoriteMovies">
               <mat-card class="movie-card">
-                <img mat-card-image [src]="movie.ImagePath" [alt]="movie.Title">
+                <img mat-card-image [src]="movie?.ImagePath || 'path/to/placeholder-image.jpg'" [alt]="movie?.Title">
+
                 <mat-card-title>{{movie.Title}}</mat-card-title>
                 <mat-card-actions>
+                  
                   <button mat-button (click)="removeFromFavorites(movie._id)">Remove</button>
                 </mat-card-actions>
               </mat-card>
             </mat-grid-tile>
           </mat-grid-list>
+          <p *ngIf="favoriteMovies.length === 0">No favorite movies added yet.</p>
         </mat-card-content>
       </mat-card>
+      
     </mat-grid-tile>
   </mat-grid-list>
 
