@@ -49,8 +49,9 @@ var MovieCardComponent = /** @class */ (function () {
     };
     MovieCardComponent.prototype.toggleFavorite = function (movie) {
         var _this = this;
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
         if (this.isFavorite(movie)) {
-            this.fetchApiData.deleteFavoriteMovie(movie._id).subscribe(function () {
+            this.fetchApiData.deleteFavoriteMovie(user.Username, movie._id).subscribe(function () {
                 _this.snackBar.open('Movie removed from favorites', 'OK', {
                     duration: 2000
                 });

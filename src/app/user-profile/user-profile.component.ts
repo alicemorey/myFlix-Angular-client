@@ -23,7 +23,9 @@ export class UserProfileComponent implements OnInit {
     public userService: UserRegistrationService,
     public router: Router,
     public snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.userData = JSON.parse(localStorage.getItem("user") || "");
+  }
 
   ngOnInit(): void {
     this.getUser();
@@ -31,9 +33,16 @@ export class UserProfileComponent implements OnInit {
   }
 
   getUser(): void {
-    this.userService.getUser().subscribe((response: any) => {
-      this.userData = response;
-    });
+    this.userService.getUser().subscribe((res: any) => {
+      this.userData = {
+        ...res,
+        id: res._id,
+        password: this.userData.password,
+        token: this.userData.token
+      };
+      localStorage.setItem("user", JSON.stringify(this.userData));
+      this.getFavoriteMovies();
+    })
   }
 
   getFavoriteMovies(): void {
@@ -46,7 +55,6 @@ export class UserProfileComponent implements OnInit {
     }
   );
 }
-  
 
   updateUser(): void {
     this.userService.editUser(this.userData).subscribe(
@@ -65,15 +73,15 @@ export class UserProfileComponent implements OnInit {
       }
     );
   }
-  
 
   resetUser(): void {
-    this.getUser();
+    this.userData = JSON.parse(localStorage.getItem("user") || "");
   }
 
   backToMovie(): void {
     this.router.navigate(['/movies']);
   }
+
   removeFromFavorites(movieId: string): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.userService.deleteFavoriteMovie(user.Username, movieId).subscribe(() => {
@@ -83,8 +91,6 @@ export class UserProfileComponent implements OnInit {
       this.getFavoriteMovies();
     });
   }
-  
-  
 
   logOut(): void {
     localStorage.clear();

@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -20,6 +31,7 @@ var UserProfileComponent = /** @class */ (function () {
             birthday: ''
         };
         this.favoriteMovies = [];
+        this.userData = JSON.parse(localStorage.getItem("user") || "");
     }
     UserProfileComponent.prototype.ngOnInit = function () {
         this.getUser();
@@ -27,8 +39,10 @@ var UserProfileComponent = /** @class */ (function () {
     };
     UserProfileComponent.prototype.getUser = function () {
         var _this = this;
-        this.userService.getUser().subscribe(function (response) {
-            _this.userData = response;
+        this.userService.getUser().subscribe(function (res) {
+            _this.userData = __assign(__assign({}, res), { id: res._id, password: _this.userData.password, token: _this.userData.token });
+            localStorage.setItem("user", JSON.stringify(_this.userData));
+            _this.getFavoriteMovies();
         });
     };
     UserProfileComponent.prototype.getFavoriteMovies = function () {
@@ -56,7 +70,7 @@ var UserProfileComponent = /** @class */ (function () {
         });
     };
     UserProfileComponent.prototype.resetUser = function () {
-        this.getUser();
+        this.userData = JSON.parse(localStorage.getItem("user") || "");
     };
     UserProfileComponent.prototype.backToMovie = function () {
         this.router.navigate(['/movies']);
