@@ -43,9 +43,9 @@ export class UserRegistrationService {
     }
 
   // Get a single movie endpoint
-  public getOneMovie(title: string): Observable<any> {
+  public getOneMovie(movieId: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + 'movies/' + title, {
+    return this.http.get(apiUrl + 'movies/' + movieId, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -92,27 +92,36 @@ export class UserRegistrationService {
 
   //get favorite movies endpoint
   public getFavoriteMovies(): Observable<any> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + 'users', {
+    return this.http.get(apiUrl + 'users/' + user.Username, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
     }).pipe(
+      map((response: any) => response.FavoriteMovies),
+      catchError(this.handleError)
+    );
+  }  
+
+  //add favorite movie endpoint
+  public addFavoriteMovie(movieId: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('user_id'); // Assuming you store the user ID
+  
+    return this.http.post(
+      `${apiUrl}users/${userId}/movies/${movieId}`,
+      {}, // Empty body, as we're adding to favorites
+      {
+        headers: new HttpHeaders({
+          Authorization: 'Bearer ' + token,
+        })
+      }
+    ).pipe(
       catchError(this.handleError)
     );
   }
-
-  //add favorite movie endpoint
- public addFavoriteMovie(movieId: string): Observable<any> {
-    const token = localStorage.getItem('token');
-    return this.http.post(apiUrl + 'users/' + movieId, {
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-      })
-    }).pipe(
-      catchError(this.handleError)
-    );
-}
+  
 
   //edit user endpoint
   public editUser(userDetails: any): Observable<any> {

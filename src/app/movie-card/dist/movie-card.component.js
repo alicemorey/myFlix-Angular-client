@@ -10,10 +10,11 @@ exports.MovieCardComponent = void 0;
 var core_1 = require("@angular/core");
 var message_box_component_1 = require("../message-box/message-box.component");
 var MovieCardComponent = /** @class */ (function () {
-    function MovieCardComponent(fetchApiData, router, dialog) {
+    function MovieCardComponent(fetchApiData, router, dialog, snackBar) {
         this.fetchApiData = fetchApiData;
         this.router = router;
         this.dialog = dialog;
+        this.snackBar = snackBar;
         this.movies = [];
         this.favoriteMovies = [];
     }
@@ -24,10 +25,11 @@ var MovieCardComponent = /** @class */ (function () {
     MovieCardComponent.prototype.getMovies = function () {
         var _this = this;
         this.fetchApiData.getAllMovies().subscribe(function (resp) {
+            console.log('Movies received:', resp);
             _this.movies = resp;
             var user = JSON.parse(localStorage.getItem("user") || "");
             _this.movies.forEach(function (movie) {
-                movie.isFavorite = user.favoriteMovies.includes(movie._id);
+                movie.isFavorite = user.favoriteMovies ? user.favoriteMovies.includes(movie._id) : false;
             });
             console.log(_this.movies);
             return _this.movies;
@@ -37,10 +39,8 @@ var MovieCardComponent = /** @class */ (function () {
     };
     MovieCardComponent.prototype.getFavoriteMovies = function () {
         var _this = this;
-        this.fetchApiData.getUser().subscribe(function (resp) {
-            _this.favoriteMovies = resp.favoriteMovies;
-            console.log(_this.favoriteMovies);
-            return _this.favoriteMovies;
+        this.fetchApiData.getFavoriteMovies().subscribe(function (resp) {
+            _this.favoriteMovies = resp;
         });
     };
     MovieCardComponent.prototype.isFavorite = function (movie) {
@@ -50,12 +50,18 @@ var MovieCardComponent = /** @class */ (function () {
     MovieCardComponent.prototype.toggleFavorite = function (movie) {
         var _this = this;
         if (this.isFavorite(movie)) {
-            this.fetchApiData.deleteFavoriteMovie(movie._id).subscribe(function (resp) {
+            this.fetchApiData.deleteFavoriteMovie(movie._id).subscribe(function () {
+                _this.snackBar.open('Movie removed from favorites', 'OK', {
+                    duration: 2000
+                });
                 _this.getFavoriteMovies();
             });
         }
         else {
-            this.fetchApiData.addFavoriteMovie(movie._id).subscribe(function (resp) {
+            this.fetchApiData.addFavoriteMovie(movie._id).subscribe(function () {
+                _this.snackBar.open('Movie added to favorites', 'OK', {
+                    duration: 2000
+                });
                 _this.getFavoriteMovies();
             });
         }
@@ -67,11 +73,11 @@ var MovieCardComponent = /** @class */ (function () {
     MovieCardComponent.prototype.redirectProfile = function () {
         this.router.navigate(["profile"]);
     };
-    MovieCardComponent.prototype.openGenreDialog = function (movie) {
+    MovieCardComponent.prototype.openGenreDialog = function (genre) {
         this.dialog.open(message_box_component_1.MessageBoxComponent, {
             data: {
-                title: String(movie.genre.type).toUpperCase(),
-                content: movie.genre.description
+                title: 'Genre',
+                content: genre
             },
             width: '350px'
         });
@@ -79,8 +85,8 @@ var MovieCardComponent = /** @class */ (function () {
     MovieCardComponent.prototype.openDirectorDialog = function (movie) {
         this.dialog.open(message_box_component_1.MessageBoxComponent, {
             data: {
-                title: movie.director.name,
-                content: movie.genre.description
+                title: movie.Director.Name,
+                content: "Bio: " + movie.Director.Bio + "\nBirth: " + movie.Director.Birth
             },
             width: '350px'
         });
@@ -88,8 +94,7 @@ var MovieCardComponent = /** @class */ (function () {
     MovieCardComponent.prototype.openSynopsisDialog = function (movie) {
         this.dialog.open(message_box_component_1.MessageBoxComponent, {
             data: {
-                title: movie.title,
-                content: movie.description
+                content: movie.Description
             },
             width: '350px'
         });

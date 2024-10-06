@@ -13,6 +13,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
+
 
 import { AppComponent } from './app.component';
 import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
@@ -55,6 +57,7 @@ const appRoutes: Routes =[
     MatDialogModule,
     MatSnackBarModule,
     MatIconModule,
+    MatGridListModule,
     RouterModule.forRoot (appRoutes),
   ],
   providers: [

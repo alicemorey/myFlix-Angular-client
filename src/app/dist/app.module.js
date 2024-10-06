@@ -20,6 +20,7 @@ var form_field_1 = require("@angular/material/form-field");
 var dialog_1 = require("@angular/material/dialog");
 var snack_bar_1 = require("@angular/material/snack-bar");
 var icon_1 = require("@angular/material/icon");
+var grid_list_1 = require("@angular/material/grid-list");
 var app_component_1 = require("./app.component");
 var user_registration_form_component_1 = require("./user-registration-form/user-registration-form.component");
 var user_login_form_component_1 = require("./user-login-form/user-login-form.component");
@@ -60,6 +61,7 @@ var AppModule = /** @class */ (function () {
                 dialog_1.MatDialogModule,
                 snack_bar_1.MatSnackBarModule,
                 icon_1.MatIconModule,
+                grid_list_1.MatGridListModule,
                 router_1.RouterModule.forRoot(appRoutes),
             ],
             providers: [

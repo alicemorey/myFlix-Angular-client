@@ -4,6 +4,7 @@ import { UserRegistrationService } from '../fetch-api-data.service'
 import { MatDialog } from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import { MessageBoxComponent } from '../message-box/message-box.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-movie-card',
@@ -17,7 +18,8 @@ export class MovieCardComponent implements OnInit {
   constructor(
     public fetchApiData:UserRegistrationService,
     public router:Router,
-    public dialog:MatDialog
+    public dialog:MatDialog,
+    public snackBar:MatSnackBar
   ) { }
 
 ngOnInit(): void {
@@ -27,12 +29,13 @@ ngOnInit(): void {
 
 getMovies(): void {
   this.fetchApiData.getAllMovies().subscribe((resp: any) => {
-      this.movies = resp;
+    console.log('Movies received:', resp);  
+    this.movies = resp;
 
       let user = JSON.parse(localStorage.getItem("user") || "");
             this.movies.forEach((movie: any) => {
-                movie.isFavorite = user.favoriteMovies.includes(movie._id);
-            })
+                movie.isFavorite = user.favoriteMovies ? user.favoriteMovies.includes(movie._id): false;
+            });
       console.log(this.movies);
       return this.movies;
     }, err=>{
@@ -41,11 +44,9 @@ getMovies(): void {
   }
 
   getFavoriteMovies(): void {
-    this.fetchApiData.getUser().subscribe((resp: any) => {
-      this.favoriteMovies = resp.favoriteMovies;
-      console.log(this.favoriteMovies);
-      return this.favoriteMovies;
-    })
+    this.fetchApiData.getFavoriteMovies().subscribe((resp: any) => {
+      this.favoriteMovies= resp;
+    });
   }
 
   isFavorite(movie: any): boolean {
@@ -56,15 +57,23 @@ getMovies(): void {
 
   toggleFavorite(movie:any): void {
     if (this.isFavorite(movie)) {
-      this.fetchApiData.deleteFavoriteMovie(movie._id).subscribe((resp: any) => {
+      this.fetchApiData.deleteFavoriteMovie(movie._id).subscribe(() => {
+        this.snackBar.open('Movie removed from favorites', 'OK', {
+          duration: 2000
+        });
         this.getFavoriteMovies();
-      })
+      });
     } else {
-      this.fetchApiData.addFavoriteMovie(movie._id).subscribe((resp: any) => {
+      this.fetchApiData.addFavoriteMovie(movie._id).subscribe(() => {
+        this.snackBar.open('Movie added to favorites', 'OK', {
+          duration: 2000
+        });
         this.getFavoriteMovies();
       })
     }
   }
+
+ 
 
   logout(): void {
     this.router.navigate(["welcome"]);
@@ -76,31 +85,35 @@ getMovies(): void {
   this.router.navigate(["profile"]);
 }
 
-openGenreDialog(movie:any): void {
+openGenreDialog(genre: string): void {
   this.dialog.open(MessageBoxComponent, {
-    data:{
-      title: String(movie.genre.type).toUpperCase(),
-      content: movie.genre.description
-    },
-     width: '350px'
-  });
-}
-
-openDirectorDialog (movie:any): void {
-  this.dialog.open(MessageBoxComponent, {
-    data:{
-      title: movie.director.name,
-      content:movie.genre.description
+    data: {
+      title: 'Genre',
+      content: genre
     },
     width: '350px'
   });
 }
 
+
+
+
+openDirectorDialog(movie: any): void {
+  this.dialog.open(MessageBoxComponent, {
+    data: {
+      title: movie.Director.Name,
+      content: `Bio: ${movie.Director.Bio}\nBirth: ${movie.Director.Birth}`
+    },
+    width: '350px'
+  });
+}
+
+
 openSynopsisDialog(movie:any): void {
   this.dialog.open(MessageBoxComponent, {
     data:{
-      title: movie.title, 
-      content: movie.description
+    
+      content: movie.Description
     },
     width: '350px'
   });

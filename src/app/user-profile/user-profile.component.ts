@@ -2,6 +2,7 @@
 import { UserRegistrationService } from '../fetch-api-data.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-profile',
@@ -20,7 +21,8 @@ export class UserProfileComponent implements OnInit {
 
   constructor(
     public userService: UserRegistrationService,
-    public router: Router
+    public router: Router,
+    public snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -35,10 +37,18 @@ export class UserProfileComponent implements OnInit {
   }
 
   getFavoriteMovies(): void {
-    this.userService.getFavoriteMovies().subscribe((movies: any[]) => {
-      this.favoriteMovies = movies;
+    this.userService.getFavoriteMovies().subscribe((moviesIds: any[]) => {
+      console.log('Favorite movies IDs:', moviesIds);
+      this.favoriteMovies = [];
+      moviesIds.forEach(id => {
+        this.userService.getOneMovie(id).subscribe((movie: any) => {
+          this.favoriteMovies.push(movie);
+        });
+      });
+
     });
   }
+  
 
   updateUser(): void {
     this.userService.editUser(this.userData).subscribe(() => {
@@ -54,11 +64,15 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['/movies']);
   }
 
-  removeFromFavorite(movie: any): void {
-    this.userService.deleteFavoriteMovie(movie._id).subscribe(() => {
+  removeFromFavorites(movieId: string): void {
+    this.userService.deleteFavoriteMovie(movieId).subscribe(() => {
+      this.snackBar.open('Movie removed from favorites', 'OK', {
+        duration: 2000
+      });
       this.getFavoriteMovies();
     });
   }
+  
 
   logOut(): void {
     localStorage.clear();

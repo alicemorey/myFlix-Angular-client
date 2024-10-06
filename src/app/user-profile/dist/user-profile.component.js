@@ -9,9 +9,10 @@ exports.__esModule = true;
 exports.UserProfileComponent = void 0;
 var core_1 = require("@angular/core");
 var UserProfileComponent = /** @class */ (function () {
-    function UserProfileComponent(userService, router) {
+    function UserProfileComponent(userService, router, snackBar) {
         this.userService = userService;
         this.router = router;
+        this.snackBar = snackBar;
         this.userData = {
             username: '',
             password: '',
@@ -32,8 +33,14 @@ var UserProfileComponent = /** @class */ (function () {
     };
     UserProfileComponent.prototype.getFavoriteMovies = function () {
         var _this = this;
-        this.userService.getFavoriteMovies().subscribe(function (movies) {
-            _this.favoriteMovies = movies;
+        this.userService.getFavoriteMovies().subscribe(function (moviesIds) {
+            console.log('Favorite movies IDs:', moviesIds);
+            _this.favoriteMovies = [];
+            moviesIds.forEach(function (id) {
+                _this.userService.getOneMovie(id).subscribe(function (movie) {
+                    _this.favoriteMovies.push(movie);
+                });
+            });
         });
     };
     UserProfileComponent.prototype.updateUser = function () {
@@ -47,9 +54,12 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.backToMovie = function () {
         this.router.navigate(['/movies']);
     };
-    UserProfileComponent.prototype.removeFromFavorite = function (movie) {
+    UserProfileComponent.prototype.removeFromFavorites = function (movieId) {
         var _this = this;
-        this.userService.deleteFavoriteMovie(movie._id).subscribe(function () {
+        this.userService.deleteFavoriteMovie(movieId).subscribe(function () {
+            _this.snackBar.open('Movie removed from favorites', 'OK', {
+                duration: 2000
+            });
             _this.getFavoriteMovies();
         });
     };
