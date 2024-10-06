@@ -46,15 +46,26 @@ export class UserProfileComponent implements OnInit {
   }
 
   getFavoriteMovies(): void {
-    this.userService.getFavoriteMovies().subscribe((movies: any[]) => {
-      console.log('Favorite movies :', movies);
-      this.favoriteMovies = movies.filter(movie => movie && movie.ImagePath);
-    },
-    error => {
+    this.userService.getFavoriteMovies().subscribe({
+      next:(movies: any) => {
+        this.favoriteMovies = movies;
+        console.log('Favorite movies :', this.favoriteMovies);
+      },
+    error: (error) => {
       console.error('Error fetching favorite movies:', error);
     }
-  );
+    });
 }
+
+addMovieToFavorites(movieId: string): void {
+  this.userService.addFavoriteMovie(movieId).subscribe(() => {
+    this.snackBar.open('Movie added to favorites', 'OK', {
+      duration: 2000
+    });
+    this.getFavoriteMovies(); // Refresh favorite movies list after adding
+  });
+}
+
 
   updateUser(): void {
     this.userService.editUser(this.userData).subscribe(

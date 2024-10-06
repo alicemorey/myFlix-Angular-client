@@ -47,11 +47,23 @@ var UserProfileComponent = /** @class */ (function () {
     };
     UserProfileComponent.prototype.getFavoriteMovies = function () {
         var _this = this;
-        this.userService.getFavoriteMovies().subscribe(function (movies) {
-            console.log('Favorite movies :', movies);
-            _this.favoriteMovies = movies.filter(function (movie) { return movie && movie.ImagePath; });
-        }, function (error) {
-            console.error('Error fetching favorite movies:', error);
+        this.userService.getFavoriteMovies().subscribe({
+            next: function (movies) {
+                _this.favoriteMovies = movies;
+                console.log('Favorite movies :', _this.favoriteMovies);
+            },
+            error: function (error) {
+                console.error('Error fetching favorite movies:', error);
+            }
+        });
+    };
+    UserProfileComponent.prototype.addMovieToFavorites = function (movieId) {
+        var _this = this;
+        this.userService.addFavoriteMovie(movieId).subscribe(function () {
+            _this.snackBar.open('Movie added to favorites', 'OK', {
+                duration: 2000
+            });
+            _this.getFavoriteMovies(); // Refresh favorite movies list after adding
         });
     };
     UserProfileComponent.prototype.updateUser = function () {
