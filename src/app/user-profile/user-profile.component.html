@@ -37,8 +37,8 @@
       <mat-card class="favorites-card">
         <mat-card-title>Favorite Movies</mat-card-title>
         <mat-card-content>
-          <mat-grid-list cols="2" rowHeight="350px" gutterSize="16px" *ngIf="favoriteMovies.length > 0">
-            <mat-grid-tile *ngFor="let movie of favoriteMovies">
+          <mat-grid-list cols="2" rowHeight="350px" gutterSize="16px" *ngIf="FavoriteMovies.length > 0">
+            <mat-grid-tile *ngFor="let movie of FavoriteMovies">
               <mat-card class="movie-card">
                 <img mat-card-image [src]="movie?.ImagePath || 'path/to/placeholder-image.jpg'" [alt]="movie?.Title">
 
@@ -50,7 +50,7 @@
               </mat-card>
             </mat-grid-tile>
           </mat-grid-list>
-          <p *ngIf="favoriteMovies.length === 0">No favorite movies added yet.</p>
+          <p *ngIf="FavoriteMovies.length === 0">No favorite movies added yet.</p>
         </mat-card-content>
       </mat-card>
       

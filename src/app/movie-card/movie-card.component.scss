@@ -8,10 +8,24 @@ mat-card {
   
   }
 
+  mat-card-title{
+    color: chocolate;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+  }
+
   .movie-card-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+  }
+  
+  .movie-card {
+    .mat-mdc-card-image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
   }
   
   
@@ -29,6 +43,8 @@ mat-card {
   .menu {
     ul {
         list-style-type: none;
+        display: flex;
+        flex-direction: row;
         padding: 0;
         margin: 0;
       }
