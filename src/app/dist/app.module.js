@@ -64,6 +64,7 @@ var AppModule = /** @class */ (function () {
                 grid_list_1.MatGridListModule,
                 router_1.RouterModule.forRoot(appRoutes),
             ],
+            exports: [router_1.RouterModule],
             providers: [
                 async_1.provideAnimationsAsync()
             ],

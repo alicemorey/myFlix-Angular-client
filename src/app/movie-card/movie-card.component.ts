@@ -2,18 +2,19 @@
 import { Component, OnInit } from '@angular/core';
 import { UserRegistrationService } from '../fetch-api-data.service'
 import { MatDialog } from '@angular/material/dialog';
-import {Router} from '@angular/router';
+
 import { MessageBoxComponent } from '../message-box/message-box.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-movie-card',
   templateUrl: './movie-card.component.html',
   styleUrls: ['./movie-card.component.scss']
 })
-export class MovieCardComponent implements OnInit {
+
+export class MovieCardComponent {
   movies: any[] = [];
-  FavoriteMovies: any[] = [];
 
   constructor(
     public fetchApiData:UserRegistrationService,
@@ -24,7 +25,6 @@ export class MovieCardComponent implements OnInit {
 
 ngOnInit(): void {
   this.getMovies();
-  this.getFavoriteMovies();
 }
 
 getMovies(): void {
@@ -42,45 +42,50 @@ getMovies(): void {
     })
   }
 
-  getFavoriteMovies(): void {
-    this.fetchApiData.getFavoriteMovies().subscribe((resp: any) => {
-      this.FavoriteMovies= resp;
-    });
-  }
 
-  isFavorite(movie: any): boolean {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return user.FavoriteMovies && user.FavoriteMovies.includes(movie._id);
-  }
-  
+  addtoFavorites(movie: any): void {
+    if (!movie || !movie._id) {
+      console.error('Invalid movie object:', movie);
+      return;
+    }
 
-  toggleFavorite(movie: any): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const username = user.Username;
-    const movieId = movie._id;
-  
-    if (username && movieId) {
-      this.fetchApiData.addFavoriteMovies(movie._id).subscribe(
-        (response) => {
-          console.log('Movie added to favorites', response);
-          this.snackBar.open('Movie added to favorites', 'OK', {
-            duration: 2000
-          });
-        },
-        (error) => {
-          console.error('Error adding movie to favorites', error);
-          this.snackBar.open('Error adding movie to favorites', 'OK', {
+    const user = JSON.parse(localStorage.getItem('user') as any);
+      this.fetchApiData
+      .addFavoriteMovies(user.Username)
+      .subscribe((res:any) => {
+          console.log('Movie added to favorites', res);
+          //update local storage
+          user.FavoriteMovies = user.FavoriteMovies || [];
+          user.FavoriteMovies.push(movie._id);
+          localStorage.setItem('user', JSON.stringify(user));
+          this.getMovies();
+      });          this.snackBar.open('Movie added to favorites', 'OK', {
             duration: 2000
           });
         }
-      );
-    } else {
-      console.error('Username or movieId is undefined');
-      this.snackBar.open('Error: Unable to add movie to favorites', 'OK', {
-        duration: 2000
-      });
-    }
-  }  
+  
+      removeFromFavorites(movieId: string): void {
+          const user: any = JSON.parse(localStorage.getItem('user') as any);
+          this.fetchApiData
+            .deleteFavoriteMovies(user.Username, { _id: movieId })
+            .subscribe((res: any) => {
+              console.log(res);
+              //update local storage
+              user.FavoriteMovies = user.FavoriteMovies.filter((id: string) => id !== movieId);
+              localStorage.setItem('user', JSON.stringify(user));
+              this.getMovies();
+            });
+            this.snackBar.open("movie removed from favorites", 'OK', {
+              duration: 2000
+           });
+        }
+        isFavorite(movieId: string): boolean {
+          const user = JSON.parse(localStorage.getItem('user') || '{}');
+          const userFavorites = user.FavoriteMovies || [];
+          return userFavorites.includes(movieId);
+        }
+        
+        
  
 
   logout(): void {

@@ -3,5 +3,10 @@
 }
 
 .messageboxcontent {
-  color: #7bc9fd;
+  color: chocolate;
+}
+
+mat-mdc-card-title {
+  color: chocolate;
+  font-family: Arial, Helvetica, sans-serif;
 }

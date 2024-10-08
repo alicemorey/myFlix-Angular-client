@@ -22,7 +22,7 @@ export class UserProfileComponent implements OnInit {
 
   constructor(
     public userService: UserRegistrationService,
-    public router: Router,
+    private router: Router,
     public snackBar: MatSnackBar
   ) {
 
@@ -31,7 +31,6 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUser();
-    this.getFavoriteMovies();
   }
 
   getUser(): void {
@@ -81,7 +80,7 @@ export class UserProfileComponent implements OnInit {
     this.userData = JSON.parse(localStorage.getItem("user") || "{}");
   }
 
-  backToMovie(): void {
+  navigateToMovies(): void {
     this.router.navigate(['/movies']);
   }
 

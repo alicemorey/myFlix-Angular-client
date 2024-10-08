@@ -60,6 +60,7 @@ const appRoutes: Routes =[
     MatGridListModule,
     RouterModule.forRoot (appRoutes),
   ],
+  exports:[RouterModule],
   providers: [
     provideAnimationsAsync()
   ],

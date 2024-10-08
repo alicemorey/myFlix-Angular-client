@@ -35,7 +35,6 @@ var UserProfileComponent = /** @class */ (function () {
     }
     UserProfileComponent.prototype.ngOnInit = function () {
         this.getUser();
-        this.getFavoriteMovies();
     };
     UserProfileComponent.prototype.getUser = function () {
         var _this = this;
@@ -75,7 +74,7 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.resetUser = function () {
         this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     };
-    UserProfileComponent.prototype.backToMovie = function () {
+    UserProfileComponent.prototype.navigateToMovies = function () {
         this.router.navigate(['/movies']);
     };
     UserProfileComponent.prototype.removeFromFavorites = function (movieId) {

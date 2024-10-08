@@ -1,10 +1,13 @@
 <div>
+  
     <nav class="menu">
+      <h1 class="heading">myFlix</h1>
       <ul>
         <li><a routerLink="/welcome">Home</a></li>
         <li><a routerLink="/movies">Movies</a></li>
         <li><a routerLink="/profile">Profile</a></li>
       </ul>
+      
     </nav>
   
     <mat-grid-list cols="3" gutterSize="16px">
@@ -24,17 +27,15 @@
             <button mat-button color="primary" (click)="openGenreDialog(movie.Genre)">Genre</button>
             <button mat-button color="primary" (click)="openDirectorDialog(movie)">Director</button>
             <button mat-button color="primary" (click)="openSynopsisDialog(movie)">Synopsis</button>
-            <button mat-icon-button (click)="toggleFavorite(movie)">
-                
-              <mat-icon [color]="isFavorite(movie)? 'accent': ''">
-                {{ isFavorite(movie) ? 'favorite' : 'favorite_border' }}
-            </mat-icon>
-            </button>
+            <mat-icon *ngIf="!isFavorite(movie._id)" (click)="addtoFavorites(movie)">favorite_border</mat-icon>
+            <mat-icon *ngIf="!isFavorite(movie._id)" (click)="removeFromFavorites(movie._id)">favorite</mat-icon>
+    
           </mat-card-actions>
         </mat-card>
       </mat-grid-tile>
     </mat-grid-list>
-  </div>
+</div>
+
   
 
   

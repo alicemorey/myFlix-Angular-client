@@ -16,11 +16,9 @@ var MovieCardComponent = /** @class */ (function () {
         this.dialog = dialog;
         this.snackBar = snackBar;
         this.movies = [];
-        this.FavoriteMovies = [];
     }
     MovieCardComponent.prototype.ngOnInit = function () {
         this.getMovies();
-        this.getFavoriteMovies();
     };
     MovieCardComponent.prototype.getMovies = function () {
         var _this = this;
@@ -37,40 +35,47 @@ var MovieCardComponent = /** @class */ (function () {
             console.log(err);
         });
     };
-    MovieCardComponent.prototype.getFavoriteMovies = function () {
+    MovieCardComponent.prototype.addtoFavorites = function (movie) {
         var _this = this;
-        this.fetchApiData.getFavoriteMovies().subscribe(function (resp) {
-            _this.FavoriteMovies = resp;
+        if (!movie || !movie._id) {
+            console.error('Invalid movie object:', movie);
+            return;
+        }
+        var user = JSON.parse(localStorage.getItem('user'));
+        this.fetchApiData
+            .addFavoriteMovies(user.Username)
+            .subscribe(function (res) {
+            console.log('Movie added to favorites', res);
+            //update local storage
+            user.FavoriteMovies = user.FavoriteMovies || [];
+            user.FavoriteMovies.push(movie._id);
+            localStorage.setItem('user', JSON.stringify(user));
+            _this.getMovies();
+        });
+        this.snackBar.open('Movie added to favorites', 'OK', {
+            duration: 2000
         });
     };
-    MovieCardComponent.prototype.isFavorite = function (movie) {
-        var user = JSON.parse(localStorage.getItem('user') || '{}');
-        return user.FavoriteMovies && user.FavoriteMovies.includes(movie._id);
-    };
-    MovieCardComponent.prototype.toggleFavorite = function (movie) {
+    MovieCardComponent.prototype.removeFromFavorites = function (movieId) {
         var _this = this;
+        var user = JSON.parse(localStorage.getItem('user'));
+        this.fetchApiData
+            .deleteFavoriteMovies(user.Username, { _id: movieId })
+            .subscribe(function (res) {
+            console.log(res);
+            //update local storage
+            user.FavoriteMovies = user.FavoriteMovies.filter(function (id) { return id !== movieId; });
+            localStorage.setItem('user', JSON.stringify(user));
+            _this.getMovies();
+        });
+        this.snackBar.open("movie removed from favorites", 'OK', {
+            duration: 2000
+        });
+    };
+    MovieCardComponent.prototype.isFavorite = function (movieId) {
         var user = JSON.parse(localStorage.getItem('user') || '{}');
-        var username = user.Username;
-        var movieId = movie._id;
-        if (username && movieId) {
-            this.fetchApiData.addFavoriteMovies(movie._id).subscribe(function (response) {
-                console.log('Movie added to favorites', response);
-                _this.snackBar.open('Movie added to favorites', 'OK', {
-                    duration: 2000
-                });
-            }, function (error) {
-                console.error('Error adding movie to favorites', error);
-                _this.snackBar.open('Error adding movie to favorites', 'OK', {
-                    duration: 2000
-                });
-            });
-        }
-        else {
-            console.error('Username or movieId is undefined');
-            this.snackBar.open('Error: Unable to add movie to favorites', 'OK', {
-                duration: 2000
-            });
-        }
+        var userFavorites = user.FavoriteMovies || [];
+        return userFavorites.includes(movieId);
     };
     MovieCardComponent.prototype.logout = function () {
         this.router.navigate(["welcome"]);
