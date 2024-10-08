@@ -43,31 +43,26 @@ getMovies(): void {
   }
 
 
-  addtoFavorites(movie: any): void {
-    if (!movie || !movie._id) {
-      console.error('Invalid movie object:', movie);
-      return;
-    }
-
+  addtoFavorites(movieId: any): void {
     const user = JSON.parse(localStorage.getItem('user') as any);
       this.fetchApiData
-      .addFavoriteMovies(user.Username)
+      .addFavoriteMovies(user.Username, movieId)
       .subscribe((res:any) => {
           console.log('Movie added to favorites', res);
           //update local storage
           user.FavoriteMovies = user.FavoriteMovies || [];
-          user.FavoriteMovies.push(movie._id);
+          user.FavoriteMovies.push(movieId);
           localStorage.setItem('user', JSON.stringify(user));
           this.getMovies();
       });          this.snackBar.open('Movie added to favorites', 'OK', {
             duration: 2000
           });
         }
-  
+        
       removeFromFavorites(movieId: string): void {
           const user: any = JSON.parse(localStorage.getItem('user') as any);
           this.fetchApiData
-            .deleteFavoriteMovies(user.Username, { _id: movieId })
+            .deleteFavoriteMovies(user.Username,movieId)
             .subscribe((res: any) => {
               console.log(res);
               //update local storage

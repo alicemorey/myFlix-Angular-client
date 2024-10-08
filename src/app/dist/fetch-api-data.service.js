@@ -102,21 +102,22 @@ var UserRegistrationService = /** @class */ (function () {
             return rxjs_1.throwError(function () { return new Error('Failed to fetch favorite movies'); });
         }));
     };
-    //add favorite movie endpoint
-    UserRegistrationService.prototype.addFavoriteMovies = function (movie) {
-        var user = JSON.parse(localStorage.getItem('user') || '{}'); // Fetch the correct user info
-        var token = localStorage.getItem('token');
-        return this.http.post(apiUrl + "users/" + user.Username + "/movies/" + movie._id, {}, // Empty body, as we're adding to favorites
+    // Add favorite movie endpoint
+    UserRegistrationService.prototype.addFavoriteMovies = function (username, movieId) {
+        var token = localStorage.getItem('token'); // Retrieve the token from localStorage
+        return this.http.post(apiUrl + "/users/" + username + "/movies/" + movieId, {}, // Since it's a POST request without a body, pass an empty object
         {
             headers: new http_1.HttpHeaders({
-                Authorization: 'Bearer ' + token
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json' // Optionally specify content type
             })
-        }).pipe(operators_1.catchError(this.handleError));
+        }).pipe(operators_1.catchError(this.handleError) // Handle any potential errors
+        );
     };
     //delete favorite movie endpoint
-    UserRegistrationService.prototype.deleteFavoriteMovies = function (username, movie) {
+    UserRegistrationService.prototype.deleteFavoriteMovies = function (username, movieId) {
         var token = localStorage.getItem('token');
-        return this.http["delete"](apiUrl + "users/" + username + "/movies/" + movie._id, {
+        return this.http["delete"](apiUrl + "users/" + username + "/movies/" + movieId, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })

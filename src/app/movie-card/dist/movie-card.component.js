@@ -35,20 +35,16 @@ var MovieCardComponent = /** @class */ (function () {
             console.log(err);
         });
     };
-    MovieCardComponent.prototype.addtoFavorites = function (movie) {
+    MovieCardComponent.prototype.addtoFavorites = function (movieId) {
         var _this = this;
-        if (!movie || !movie._id) {
-            console.error('Invalid movie object:', movie);
-            return;
-        }
         var user = JSON.parse(localStorage.getItem('user'));
         this.fetchApiData
-            .addFavoriteMovies(user.Username)
+            .addFavoriteMovies(user.Username, movieId)
             .subscribe(function (res) {
             console.log('Movie added to favorites', res);
             //update local storage
             user.FavoriteMovies = user.FavoriteMovies || [];
-            user.FavoriteMovies.push(movie._id);
+            user.FavoriteMovies.push(movieId);
             localStorage.setItem('user', JSON.stringify(user));
             _this.getMovies();
         });
@@ -60,7 +56,7 @@ var MovieCardComponent = /** @class */ (function () {
         var _this = this;
         var user = JSON.parse(localStorage.getItem('user'));
         this.fetchApiData
-            .deleteFavoriteMovies(user.Username, { _id: movieId })
+            .deleteFavoriteMovies(user.Username, movieId)
             .subscribe(function (res) {
             console.log(res);
             //update local storage

@@ -49,6 +49,7 @@ export class UserProfileComponent implements OnInit {
   getFavoriteMovies(): void {
     this.userService.getFavoriteMovies().subscribe({
       next:(movies: any) => {
+        console.log('Favorite Movies API Response:', movies);
         this.FavoriteMovies = movies;
         console.log('Favorite movies :', this.FavoriteMovies);
       },
@@ -86,7 +87,7 @@ export class UserProfileComponent implements OnInit {
 
   removeFromFavorites(movieId: string): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.userService.deleteFavoriteMovies(user.Username, { _id: movieId }).subscribe(() => {
+    this.userService.deleteFavoriteMovies(user.Username, movieId).subscribe(() => {
       this.snackBar.open('Movie removed from favorites', 'OK', {
         duration: 2000
       });

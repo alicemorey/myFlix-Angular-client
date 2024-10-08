@@ -48,6 +48,7 @@ var UserProfileComponent = /** @class */ (function () {
         var _this = this;
         this.userService.getFavoriteMovies().subscribe({
             next: function (movies) {
+                console.log('Favorite Movies API Response:', movies);
                 _this.FavoriteMovies = movies;
                 console.log('Favorite movies :', _this.FavoriteMovies);
             },
@@ -80,7 +81,7 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.removeFromFavorites = function (movieId) {
         var _this = this;
         var user = JSON.parse(localStorage.getItem('user') || '{}');
-        this.userService.deleteFavoriteMovies(user.Username, { _id: movieId }).subscribe(function () {
+        this.userService.deleteFavoriteMovies(user.Username, movieId).subscribe(function () {
             _this.snackBar.open('Movie removed from favorites', 'OK', {
                 duration: 2000
             });

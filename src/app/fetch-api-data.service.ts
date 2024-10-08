@@ -129,29 +129,29 @@ private handleError(error: HttpErrorResponse): any {
     );
   }
   
+// Add favorite movie endpoint
+public addFavoriteMovies(username: string, movieId: string): Observable<any> {
+  const token = localStorage.getItem('token'); // Retrieve the token from localStorage
 
-  //add favorite movie endpoint
-  public addFavoriteMovies(movie: { _id: string }): Observable<any> {
-    const user = JSON.parse(localStorage.getItem('user') || '{}'); // Fetch the correct user info
-    const token = localStorage.getItem('token');
-  
-    return this.http.post(
-      `${apiUrl}users/${user.Username}/movies/${movie._id}`,
-      {}, // Empty body, as we're adding to favorites
-      {
-        headers: new HttpHeaders({
-          Authorization: 'Bearer ' + token,
-        })
-      }
-    ).pipe(
-      catchError(this.handleError)
-    );
-  }  
+  return this.http.post(
+    `${apiUrl}/users/${username}/movies/${movieId}`,
+    {},  // Since it's a POST request without a body, pass an empty object
+    {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ' + token,  // Set the Authorization header
+        'Content-Type': 'application/json' // Optionally specify content type
+      })
+    }
+  ).pipe(
+    catchError(this.handleError)  // Handle any potential errors
+  );
+}
+
 
   //delete favorite movie endpoint
-  public deleteFavoriteMovies(username: string, movie: |{_id: string}): Observable<any> {
+  public deleteFavoriteMovies(username: string, movieId:string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.delete(`${apiUrl}users/${username}/movies/${movie._id}`, {
+    return this.http.delete(`${apiUrl}users/${username}/movies/${movieId}`, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })

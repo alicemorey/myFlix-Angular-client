@@ -9,6 +9,7 @@
   </nav>
 
   <mat-grid-list cols="2" gutterSize="16px">
+    <!-- User Profile Card -->
     <mat-grid-tile>
       <mat-card class="profile-card">
         <mat-card-header>
@@ -34,27 +35,34 @@
       </mat-card>
     </mat-grid-tile>
 
+    <!-- Favorite Movies Card -->
     <mat-grid-tile>
       <mat-card class="favorites-card">
-        <mat-card-title>Favorite Movies</mat-card-title>
+        <mat-card-title>Your Favorite Movies</mat-card-title>
         <mat-card-content>
-          <mat-grid-list cols="2" rowHeight="350px" gutterSize="16px" *ngIf="FavoriteMovies.length > 0">
-            <mat-grid-tile *ngFor="let movie of FavoriteMovies">
-              <mat-card class="movie-card">
-                <img mat-card-image [src]="movie?.ImagePath || 'path/to/placeholder-image.jpg'" [alt]="movie?.Title">
-
-                <mat-card-title>{{movie.Title}}</mat-card-title>
-                <mat-card-actions>
-                  
-                  <button mat-button (click)="removeFromFavorites(movie._id)">Remove</button>
-                </mat-card-actions>
-              </mat-card>
-            </mat-grid-tile>
-          </mat-grid-list>
-          <p *ngIf="FavoriteMovies.length === 0">No favorite movies added yet.</p>
+          <div *ngIf="FavoriteMovies.length > 0; else noFavorites">
+            <mat-grid-list cols="2" rowHeight="350px" gutterSize="16px">
+              <!-- Loop over FavoriteMovies array -->
+              <mat-grid-tile *ngFor="let movie of FavoriteMovies">
+                <mat-card class="movie-card">
+                  <mat-card-title>{{ movie.Title }}</mat-card-title>
+                  <mat-card-content>
+                    <p>{{ movie.Description }}</p>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <button mat-button (click)="removeFromFavorites(movie._id)">Remove</button>
+                  </mat-card-actions>
+                </mat-card>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+          
+          <!-- No Favorites Template -->
+          <ng-template #noFavorites>
+            <p>No favorite movies added yet.</p>
+          </ng-template>
         </mat-card-content>
       </mat-card>
-      
     </mat-grid-tile>
   </mat-grid-list>
 
@@ -63,5 +71,3 @@
     <button mat-raised-button (click)="navigateToMovies()" color="accent">Back to Movies</button>
   </div>
 </div>
-
-  
