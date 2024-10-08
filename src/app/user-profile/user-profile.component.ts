@@ -1,6 +1,7 @@
 
 import { UserRegistrationService } from '../fetch-api-data.service';
 import { Component, OnInit } from '@angular/core';
+
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -17,14 +18,15 @@ export class UserProfileComponent implements OnInit {
     email: '',
     birthday: ''
   };
-  favoriteMovies: any[] = [];
+  FavoriteMovies: any[] = [];
 
   constructor(
     public userService: UserRegistrationService,
     public router: Router,
     public snackBar: MatSnackBar
   ) {
-    this.userData = JSON.parse(localStorage.getItem("user") || "");
+
+    this.userData = JSON.parse(localStorage.getItem("user") || "{}");
   }
 
   ngOnInit(): void {
@@ -48,24 +50,14 @@ export class UserProfileComponent implements OnInit {
   getFavoriteMovies(): void {
     this.userService.getFavoriteMovies().subscribe({
       next:(movies: any) => {
-        this.favoriteMovies = movies;
-        console.log('Favorite movies :', this.favoriteMovies);
+        this.FavoriteMovies = movies;
+        console.log('Favorite movies :', this.FavoriteMovies);
       },
     error: (error) => {
       console.error('Error fetching favorite movies:', error);
     }
     });
 }
-
-addMovieToFavorites(movieId: string): void {
-  this.userService.addFavoriteMovie(movieId).subscribe(() => {
-    this.snackBar.open('Movie added to favorites', 'OK', {
-      duration: 2000
-    });
-    this.getFavoriteMovies(); // Refresh favorite movies list after adding
-  });
-}
-
 
   updateUser(): void {
     this.userService.editUser(this.userData).subscribe(
@@ -86,7 +78,7 @@ addMovieToFavorites(movieId: string): void {
   }
 
   resetUser(): void {
-    this.userData = JSON.parse(localStorage.getItem("user") || "");
+    this.userData = JSON.parse(localStorage.getItem("user") || "{}");
   }
 
   backToMovie(): void {
@@ -95,7 +87,7 @@ addMovieToFavorites(movieId: string): void {
 
   removeFromFavorites(movieId: string): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.userService.deleteFavoriteMovie(user.Username, movieId).subscribe(() => {
+    this.userService.deleteFavoriteMovies(user.Username, { _id: movieId }).subscribe(() => {
       this.snackBar.open('Movie removed from favorites', 'OK', {
         duration: 2000
       });

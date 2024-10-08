@@ -103,7 +103,7 @@ var UserRegistrationService = /** @class */ (function () {
         }));
     };
     //add favorite movie endpoint
-    UserRegistrationService.prototype.addFavoriteMovie = function (movie) {
+    UserRegistrationService.prototype.addFavoriteMovies = function (movie) {
         var user = JSON.parse(localStorage.getItem('user') || '{}'); // Fetch the correct user info
         var token = localStorage.getItem('token');
         return this.http.post(apiUrl + "users/" + user.Username + "/movies/" + movie._id, {}, // Empty body, as we're adding to favorites
@@ -114,7 +114,7 @@ var UserRegistrationService = /** @class */ (function () {
         }).pipe(operators_1.catchError(this.handleError));
     };
     //delete favorite movie endpoint
-    UserRegistrationService.prototype.deleteFavoriteMovie = function (username, movie) {
+    UserRegistrationService.prototype.deleteFavoriteMovies = function (username, movie) {
         var token = localStorage.getItem('token');
         return this.http["delete"](apiUrl + "users/" + username + "/movies/" + movie._id, {
             headers: new http_1.HttpHeaders({

@@ -131,7 +131,7 @@ private handleError(error: HttpErrorResponse): any {
   
 
   //add favorite movie endpoint
-  public addFavoriteMovie(movie: { _id: string }): Observable<any> {
+  public addFavoriteMovies(movie: { _id: string }): Observable<any> {
     const user = JSON.parse(localStorage.getItem('user') || '{}'); // Fetch the correct user info
     const token = localStorage.getItem('token');
   
@@ -149,7 +149,7 @@ private handleError(error: HttpErrorResponse): any {
   }  
 
   //delete favorite movie endpoint
-  public deleteFavoriteMovie(username: string, movie: |{_id: string}): Observable<any> {
+  public deleteFavoriteMovies(username: string, movie: |{_id: string}): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.delete(`${apiUrl}users/${username}/movies/${movie._id}`, {
       headers: new HttpHeaders({

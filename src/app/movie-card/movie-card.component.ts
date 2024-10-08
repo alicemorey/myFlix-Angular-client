@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class MovieCardComponent implements OnInit {
   movies: any[] = [];
-  favoriteMovies: any[] = [];
+  FavoriteMovies: any[] = [];
 
   constructor(
     public fetchApiData:UserRegistrationService,
@@ -34,9 +34,8 @@ getMovies(): void {
 
       let user = JSON.parse(localStorage.getItem("user") || "");
             this.movies.forEach((movie: any) => {
-                movie.isFavorite = user.favoriteMovies ? user.favoriteMovies.includes(movie._id): false;
-            });
-      console.log(this.movies);
+                movie.isFavorite = user.FavoriteMovies ? user.FavoriteMovies.includes(movie._id) : false;
+            });      console.log(this.movies);
       return this.movies;
     }, err=>{
       console.log(err);
@@ -45,7 +44,7 @@ getMovies(): void {
 
   getFavoriteMovies(): void {
     this.fetchApiData.getFavoriteMovies().subscribe((resp: any) => {
-      this.favoriteMovies= resp;
+      this.FavoriteMovies= resp;
     });
   }
 
@@ -55,25 +54,33 @@ getMovies(): void {
   }
   
 
-  toggleFavorite(movie:any): void {
+  toggleFavorite(movie: any): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (this.isFavorite(movie)) {
-      this.fetchApiData.deleteFavoriteMovie(user.Username, movie._id).subscribe(() => {
-        this.snackBar.open('Movie removed from favorites', 'OK', {
-          duration: 2000
-        });
-        this.getFavoriteMovies();
-      });
+    const username = user.Username;
+    const movieId = movie._id;
+  
+    if (username && movieId) {
+      this.fetchApiData.addFavoriteMovies(movie._id).subscribe(
+        (response) => {
+          console.log('Movie added to favorites', response);
+          this.snackBar.open('Movie added to favorites', 'OK', {
+            duration: 2000
+          });
+        },
+        (error) => {
+          console.error('Error adding movie to favorites', error);
+          this.snackBar.open('Error adding movie to favorites', 'OK', {
+            duration: 2000
+          });
+        }
+      );
     } else {
-      this.fetchApiData.addFavoriteMovie(movie._id).subscribe(() => {
-        this.snackBar.open('Movie added to favorites', 'OK', {
-          duration: 2000
-        });
-        this.getFavoriteMovies();
-      })
+      console.error('Username or movieId is undefined');
+      this.snackBar.open('Error: Unable to add movie to favorites', 'OK', {
+        duration: 2000
+      });
     }
-  }
-
+  }  
  
 
   logout(): void {

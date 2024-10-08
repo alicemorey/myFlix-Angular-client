@@ -16,7 +16,7 @@ var MovieCardComponent = /** @class */ (function () {
         this.dialog = dialog;
         this.snackBar = snackBar;
         this.movies = [];
-        this.favoriteMovies = [];
+        this.FavoriteMovies = [];
     }
     MovieCardComponent.prototype.ngOnInit = function () {
         this.getMovies();
@@ -29,7 +29,7 @@ var MovieCardComponent = /** @class */ (function () {
             _this.movies = resp;
             var user = JSON.parse(localStorage.getItem("user") || "");
             _this.movies.forEach(function (movie) {
-                movie.isFavorite = user.favoriteMovies ? user.favoriteMovies.includes(movie._id) : false;
+                movie.isFavorite = user.FavoriteMovies ? user.FavoriteMovies.includes(movie._id) : false;
             });
             console.log(_this.movies);
             return _this.movies;
@@ -40,7 +40,7 @@ var MovieCardComponent = /** @class */ (function () {
     MovieCardComponent.prototype.getFavoriteMovies = function () {
         var _this = this;
         this.fetchApiData.getFavoriteMovies().subscribe(function (resp) {
-            _this.favoriteMovies = resp;
+            _this.FavoriteMovies = resp;
         });
     };
     MovieCardComponent.prototype.isFavorite = function (movie) {
@@ -50,20 +50,25 @@ var MovieCardComponent = /** @class */ (function () {
     MovieCardComponent.prototype.toggleFavorite = function (movie) {
         var _this = this;
         var user = JSON.parse(localStorage.getItem('user') || '{}');
-        if (this.isFavorite(movie)) {
-            this.fetchApiData.deleteFavoriteMovie(user.Username, movie._id).subscribe(function () {
-                _this.snackBar.open('Movie removed from favorites', 'OK', {
-                    duration: 2000
-                });
-                _this.getFavoriteMovies();
-            });
-        }
-        else {
-            this.fetchApiData.addFavoriteMovie(movie._id).subscribe(function () {
+        var username = user.Username;
+        var movieId = movie._id;
+        if (username && movieId) {
+            this.fetchApiData.addFavoriteMovies(movie._id).subscribe(function (response) {
+                console.log('Movie added to favorites', response);
                 _this.snackBar.open('Movie added to favorites', 'OK', {
                     duration: 2000
                 });
-                _this.getFavoriteMovies();
+            }, function (error) {
+                console.error('Error adding movie to favorites', error);
+                _this.snackBar.open('Error adding movie to favorites', 'OK', {
+                    duration: 2000
+                });
+            });
+        }
+        else {
+            console.error('Username or movieId is undefined');
+            this.snackBar.open('Error: Unable to add movie to favorites', 'OK', {
+                duration: 2000
             });
         }
     };

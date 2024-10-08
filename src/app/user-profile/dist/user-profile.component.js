@@ -30,8 +30,8 @@ var UserProfileComponent = /** @class */ (function () {
             email: '',
             birthday: ''
         };
-        this.favoriteMovies = [];
-        this.userData = JSON.parse(localStorage.getItem("user") || "");
+        this.FavoriteMovies = [];
+        this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     }
     UserProfileComponent.prototype.ngOnInit = function () {
         this.getUser();
@@ -49,21 +49,12 @@ var UserProfileComponent = /** @class */ (function () {
         var _this = this;
         this.userService.getFavoriteMovies().subscribe({
             next: function (movies) {
-                _this.favoriteMovies = movies;
-                console.log('Favorite movies :', _this.favoriteMovies);
+                _this.FavoriteMovies = movies;
+                console.log('Favorite movies :', _this.FavoriteMovies);
             },
             error: function (error) {
                 console.error('Error fetching favorite movies:', error);
             }
-        });
-    };
-    UserProfileComponent.prototype.addMovieToFavorites = function (movieId) {
-        var _this = this;
-        this.userService.addFavoriteMovie(movieId).subscribe(function () {
-            _this.snackBar.open('Movie added to favorites', 'OK', {
-                duration: 2000
-            });
-            _this.getFavoriteMovies(); // Refresh favorite movies list after adding
         });
     };
     UserProfileComponent.prototype.updateUser = function () {
@@ -82,7 +73,7 @@ var UserProfileComponent = /** @class */ (function () {
         });
     };
     UserProfileComponent.prototype.resetUser = function () {
-        this.userData = JSON.parse(localStorage.getItem("user") || "");
+        this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     };
     UserProfileComponent.prototype.backToMovie = function () {
         this.router.navigate(['/movies']);
@@ -90,7 +81,7 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.removeFromFavorites = function (movieId) {
         var _this = this;
         var user = JSON.parse(localStorage.getItem('user') || '{}');
-        this.userService.deleteFavoriteMovie(user.Username, movieId).subscribe(function () {
+        this.userService.deleteFavoriteMovies(user.Username, { _id: movieId }).subscribe(function () {
             _this.snackBar.open('Movie removed from favorites', 'OK', {
                 duration: 2000
             });
