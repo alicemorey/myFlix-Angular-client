@@ -34,27 +34,14 @@ var UserProfileComponent = /** @class */ (function () {
         this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     }
     UserProfileComponent.prototype.ngOnInit = function () {
-        this.getUser();
+        this.getFavoriteMovies();
     };
-    UserProfileComponent.prototype.getUser = function () {
+    UserProfileComponent.prototype.editUser = function () {
         var _this = this;
-        this.userService.getUser().subscribe(function (res) {
+        this.userService.editUser(this.userData).subscribe(function (res) {
             _this.userData = __assign(__assign({}, res), { id: res._id, password: _this.userData.password, token: _this.userData.token });
             localStorage.setItem("user", JSON.stringify(_this.userData));
-            _this.getFavoriteMovies();
-        });
-    };
-    UserProfileComponent.prototype.getFavoriteMovies = function () {
-        var _this = this;
-        this.userService.getFavoriteMovies().subscribe({
-            next: function (movies) {
-                console.log('Favorite Movies API Response:', movies);
-                _this.FavoriteMovies = movies;
-                console.log('Favorite movies :', _this.FavoriteMovies);
-            },
-            error: function (error) {
-                console.error('Error fetching favorite movies:', error);
-            }
+            console.log(_this.userData);
         });
     };
     UserProfileComponent.prototype.updateUser = function () {
@@ -64,7 +51,7 @@ var UserProfileComponent = /** @class */ (function () {
                 duration: 2000
             });
             localStorage.setItem('user', JSON.stringify(updatedUser));
-            _this.getUser(); // refresh user data
+            _this.editUser(); // refresh user data
         }, function (error) {
             _this.snackBar.open('Failed to update user profile', 'OK', {
                 duration: 2000
@@ -75,8 +62,14 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.resetUser = function () {
         this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     };
-    UserProfileComponent.prototype.navigateToMovies = function () {
-        this.router.navigate(['/movies']);
+    UserProfileComponent.prototype.getFavoriteMovies = function () {
+        var _this = this;
+        this.userService.getAllMovies().subscribe(function (resp) {
+            _this.FavoriteMovies = resp.filter(function (m) {
+                return _this.userData.FavoriteMovies.includes(m._id);
+            });
+            console.log('Favorite movies :', _this.FavoriteMovies);
+        });
     };
     UserProfileComponent.prototype.removeFromFavorites = function (movieId) {
         var _this = this;
@@ -88,9 +81,22 @@ var UserProfileComponent = /** @class */ (function () {
             _this.getFavoriteMovies();
         });
     };
+    UserProfileComponent.prototype.deleteUser = function () {
+        var _this = this;
+        this.userService.deleteUser().subscribe(function () {
+            localStorage.clear();
+            _this.router.navigate(['/welcome']);
+            _this.snackBar.open('User deleted successfully', 'OK', {
+                duration: 2000
+            });
+        });
+    };
     UserProfileComponent.prototype.logOut = function () {
         localStorage.clear();
         this.router.navigate(['/welcome']);
+    };
+    UserProfileComponent.prototype.navigateToMovies = function () {
+        this.router.navigate(['/movies']);
     };
     UserProfileComponent = __decorate([
         core_1.Component({

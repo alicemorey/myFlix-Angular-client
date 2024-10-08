@@ -30,33 +30,20 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUser();
+    this.getFavoriteMovies();
   }
 
-  getUser(): void {
-    this.userService.getUser().subscribe((res: any) => {
-      this.userData = {
-        ...res,
-        id: res._id,
-        password: this.userData.password,
-        token: this.userData.token
-      };
-      localStorage.setItem("user", JSON.stringify(this.userData));
-      this.getFavoriteMovies();
-    })
-  }
-
-  getFavoriteMovies(): void {
-    this.userService.getFavoriteMovies().subscribe({
-      next:(movies: any) => {
-        console.log('Favorite Movies API Response:', movies);
-        this.FavoriteMovies = movies;
-        console.log('Favorite movies :', this.FavoriteMovies);
-      },
-    error: (error) => {
-      console.error('Error fetching favorite movies:', error);
-    }
-    });
+editUser(): void {
+  this.userService.editUser(this.userData).subscribe((res: any) => {
+    this.userData = {
+      ...res,
+      id: res._id,
+      password: this.userData.password,
+      token: this.userData.token
+    };
+    localStorage.setItem("user", JSON.stringify(this.userData));
+    console.log(this.userData);
+  });
 }
 
   updateUser(): void {
@@ -66,7 +53,7 @@ export class UserProfileComponent implements OnInit {
           duration: 2000
         });
         localStorage.setItem('user', JSON.stringify(updatedUser));
-        this.getUser(); // refresh user data
+        this.editUser(); // refresh user data
       },
       (error) => {
         this.snackBar.open('Failed to update user profile', 'OK', {
@@ -81,9 +68,14 @@ export class UserProfileComponent implements OnInit {
     this.userData = JSON.parse(localStorage.getItem("user") || "{}");
   }
 
-  navigateToMovies(): void {
-    this.router.navigate(['/movies']);
-  }
+  getFavoriteMovies(): void {
+    this.userService.getAllMovies().subscribe((resp: any) => {
+        this.FavoriteMovies = resp.filter((m : any) => {
+          return this.userData.FavoriteMovies.includes(m._id);
+        });
+        console.log('Favorite movies :', this.FavoriteMovies);
+    });
+}
 
   removeFromFavorites(movieId: string): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -95,8 +87,22 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  deleteUser(): void {
+    this.userService.deleteUser().subscribe(() => {
+      localStorage.clear();
+      this.router.navigate(['/welcome']);
+      this.snackBar.open('User deleted successfully', 'OK', {
+        duration: 2000
+      });
+    });
+  }
+
   logOut(): void {
     localStorage.clear();
     this.router.navigate(['/welcome']);
+  }
+
+  navigateToMovies(): void {
+    this.router.navigate(['/movies']);
   }
 }
