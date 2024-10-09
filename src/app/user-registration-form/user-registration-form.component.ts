@@ -24,6 +24,10 @@ export class UserRegistrationFormComponent implements OnInit {
   }
 
   //this is the function responsible for sending the form inputs to the backend
+  
+  /**
+   * Function to register a new user usin FetchAPI
+   */
   registerUser(): void {
     this.fetchApiData.userRegistration(this.userData).subscribe((response) => {
   // Logic for a successful user registration goes here! (To be implemented)
