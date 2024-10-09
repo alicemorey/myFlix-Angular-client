@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 
 
+
 //Declaring the api url that will provide data for the client app
 const apiUrl = 'https://myflix-movies2024-b07bf2b16bbc.herokuapp.com/';
 
@@ -39,14 +40,18 @@ private handleError(error: HttpErrorResponse): any {
  // Making the api call for the user registration endpoint
   public userRegistration(userDetails: any): Observable<any> {
     console.log(userDetails);
-    return this.http.post(apiUrl + 'users', userDetails)
+
+    //make a POST request to the user registration endpoint
+    return this.http
+    .post(apiUrl + '/users', userDetails)
     .pipe(catchError(this.handleError)
     );
   }
 
   // User login endpoint
   public userLogin(userDetails: any): Observable<any> {
-    return this.http.post(apiUrl + 'login', userDetails).pipe(
+    return this.http
+    .post(apiUrl + '/login', userDetails).pipe(
       catchError(this.handleError)
     );
   }
@@ -58,7 +63,8 @@ private handleError(error: HttpErrorResponse): any {
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + token,
     });
-    return this.http.get(apiUrl + 'movies', { headers })
+    return this.http
+      .get(apiUrl + '/movies', { headers })
         .pipe(catchError(this.handleError));
     }
 

@@ -20,10 +20,11 @@ exports.__esModule = true;
 exports.UserProfileComponent = void 0;
 var core_1 = require("@angular/core");
 var UserProfileComponent = /** @class */ (function () {
-    function UserProfileComponent(userService, router, snackBar) {
-        this.userService = userService;
+    function UserProfileComponent(fetchApiData, router, snackBar, fetchUsers) {
+        this.fetchApiData = fetchApiData;
         this.router = router;
         this.snackBar = snackBar;
+        this.fetchUsers = fetchUsers;
         this.userData = {
             username: '',
             password: '',
@@ -31,22 +32,48 @@ var UserProfileComponent = /** @class */ (function () {
             birthday: ''
         };
         this.FavoriteMovies = [];
+        this.movies = [];
         this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     }
     UserProfileComponent.prototype.ngOnInit = function () {
+        // this.getUser();
         this.getFavoriteMovies();
     };
+    //  getUser(): void {
+    //   this.fetchApiData.getUser().subscribe((resp: any) => {
+    //     this.userData = {
+    //       ...resp,
+    //       id: resp._id,
+    //       password: this.userData.password,
+    //       token: this.userData.token
+    //     };
+    //     localStorage.setItem("user", JSON.stringify(this.userData));
+    //     console.log(this.userData);
+    //   });
+    // }
+    /**
+     * Function to edit user using FetchApiData
+     */
     UserProfileComponent.prototype.editUser = function () {
         var _this = this;
-        this.userService.editUser(this.userData).subscribe(function (res) {
+        this.fetchApiData.editUser(this.userData).subscribe(function (res) {
             _this.userData = __assign(__assign({}, res), { id: res._id, password: _this.userData.password, token: _this.userData.token });
             localStorage.setItem("user", JSON.stringify(_this.userData));
             console.log(_this.userData);
         });
     };
+    UserProfileComponent.prototype.showGenreAlert = function (genre) {
+        alert(genre);
+    };
+    UserProfileComponent.prototype.showDirectorAlert = function (director) {
+        alert(director);
+    };
+    UserProfileComponent.prototype.showSynopsisAlert = function (synopsis) {
+        alert(synopsis);
+    };
     UserProfileComponent.prototype.updateUser = function () {
         var _this = this;
-        this.userService.editUser(this.userData).subscribe(function (updatedUser) {
+        this.fetchApiData.editUser(this.userData).subscribe(function (updatedUser) {
             _this.snackBar.open('User profile updated successfully', 'OK', {
                 duration: 2000
             });
@@ -62,9 +89,12 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.resetUser = function () {
         this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     };
+    /**
+   * Function to get users favorite movies using FetchApiData
+     */
     UserProfileComponent.prototype.getFavoriteMovies = function () {
         var _this = this;
-        this.userService.getAllMovies().subscribe(function (resp) {
+        this.fetchApiData.getAllMovies().subscribe(function (resp) {
             _this.FavoriteMovies = resp.filter(function (m) {
                 return _this.userData.FavoriteMovies.includes(m._id);
             });
@@ -74,7 +104,7 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.removeFromFavorites = function (movieId) {
         var _this = this;
         var user = JSON.parse(localStorage.getItem('user') || '{}');
-        this.userService.deleteFavoriteMovies(user.Username, movieId).subscribe(function () {
+        this.fetchApiData.deleteFavoriteMovies(user.Username, movieId).subscribe(function () {
             _this.snackBar.open('Movie removed from favorites', 'OK', {
                 duration: 2000
             });
@@ -83,7 +113,7 @@ var UserProfileComponent = /** @class */ (function () {
     };
     UserProfileComponent.prototype.deleteUser = function () {
         var _this = this;
-        this.userService.deleteUser().subscribe(function () {
+        this.fetchApiData.deleteUser().subscribe(function () {
             localStorage.clear();
             _this.router.navigate(['/welcome']);
             _this.snackBar.open('User deleted successfully', 'OK', {
@@ -91,10 +121,16 @@ var UserProfileComponent = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Function to log out the user
+     */
     UserProfileComponent.prototype.logOut = function () {
         localStorage.clear();
         this.router.navigate(['/welcome']);
     };
+    /**
+     * Fuction to navigate to movies page
+     */
     UserProfileComponent.prototype.navigateToMovies = function () {
         this.router.navigate(['/movies']);
     };

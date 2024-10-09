@@ -37,12 +37,15 @@ var UserRegistrationService = /** @class */ (function () {
     // Making the api call for the user registration endpoint
     UserRegistrationService.prototype.userRegistration = function (userDetails) {
         console.log(userDetails);
-        return this.http.post(apiUrl + 'users', userDetails)
+        //make a POST request to the user registration endpoint
+        return this.http
+            .post(apiUrl + '/users', userDetails)
             .pipe(operators_1.catchError(this.handleError));
     };
     // User login endpoint
     UserRegistrationService.prototype.userLogin = function (userDetails) {
-        return this.http.post(apiUrl + 'login', userDetails).pipe(operators_1.catchError(this.handleError));
+        return this.http
+            .post(apiUrl + '/login', userDetails).pipe(operators_1.catchError(this.handleError));
     };
     //Get all movies endpoint
     UserRegistrationService.prototype.getAllMovies = function () {
@@ -50,7 +53,8 @@ var UserRegistrationService = /** @class */ (function () {
         var headers = new http_1.HttpHeaders({
             Authorization: 'Bearer ' + token
         });
-        return this.http.get(apiUrl + 'movies', { headers: headers })
+        return this.http
+            .get(apiUrl + '/movies', { headers: headers })
             .pipe(operators_1.catchError(this.handleError));
     };
     // Get a single movie endpoint

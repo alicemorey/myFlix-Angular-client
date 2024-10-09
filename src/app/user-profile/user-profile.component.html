@@ -1,3 +1,5 @@
+
+
 <div class="profile-page">
   <h1 class="heading">myFlix</h1>
   <nav class="menu">
@@ -9,6 +11,7 @@
   </nav>
 
   <mat-grid-list cols="2" gutterSize="16px">
+
     <!-- User Profile Card -->
     <mat-grid-tile>
       <mat-card class="profile-card">
@@ -36,35 +39,61 @@
     </mat-grid-tile>
 
     <!-- Favorite Movies Card -->
-    <mat-grid-tile>
-      <mat-card class="favorites-card">
-        <mat-card-title>Your Favorite Movies</mat-card-title>
-        <mat-card-content>
-          <div *ngIf="FavoriteMovies.length > 0; else noFavorites">
-            <mat-grid-list cols="2" rowHeight="350px" gutterSize="16px">
-              <!-- Loop over FavoriteMovies array -->
-              <mat-grid-tile *ngFor="let movie of FavoriteMovies">
-                <mat-card class="movie-card">
+    <mat-tab-group>
+      <mat-tab label="My list of favorite movies">
+        <div class="movie-grid">
+          <ng-container *ngIf="favorites.length > 0; else noFavorites">
+            <mat-card *ngFor="let movie of favorites; let i = index">
+              <mat-card-content>
+                <mat-card-header>
                   <mat-card-title>{{ movie.Title }}</mat-card-title>
-                  <mat-card-content>
-                    <p>{{ movie.Description }}</p>
-                  </mat-card-content>
-                  <mat-card-actions>
-                    <button mat-button (click)="removeFromFavorites(movie)">Remove</button>
-                  </mat-card-actions>
-                </mat-card>
-              </mat-grid-tile>
-            </mat-grid-list>
-          </div>
-          
-          <!-- No Favorites Template -->
+                  <mat-card-subtitle>Directed by: {{ movie.Director }}</mat-card-subtitle>
+                  <mat-card-subtitle>{{ movie.Genre }}</mat-card-subtitle>
+                </mat-card-header>
+
+                <img
+                  mat-card-image
+                  src="{{ movie.ImgPath }}"
+                  alt="{{ movie.Title }}"
+                  width="230"
+                />
+                <mat-card-actions>
+                  <button
+                    mat-button
+                    color="primary"
+                    (click)="openDirectorDialog(movie)"
+                  >
+                    Director
+                  </button>
+                  <button
+                    mat-button
+                    color="primary"
+                    (click)="openSynopsisDialog(movie)"
+                  >
+                    Synopsis
+                  </button>
+                  <button
+                    class="heart-icon"
+                    mat-icon-button
+                    (click)="removeTitleFromFavorites(movie)"
+                  >
+                    <mat-icon>favorite</mat-icon>
+                  </button>
+                </mat-card-actions>
+              </mat-card-content>
+            </mat-card>
+          </ng-container>
           <ng-template #noFavorites>
-            <p>No favorite movies added yet.</p>
+            <p class="no-favorites-message">
+              Oops, you don't have any favorite movies. Go ahead and add some!
+            </p>
           </ng-template>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+        </div>
+      </mat-tab>
+      <mat-tab label="Update my profile">
+        <app-update-user-form></app-update-user-form>
+      </mat-tab>
+    </mat-tab-group>
 
   <div class="action-buttons">
     <button mat-raised-button (click)="logOut()" color="primary">Logout</button>
