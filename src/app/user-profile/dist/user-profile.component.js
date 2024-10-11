@@ -20,20 +20,22 @@ exports.__esModule = true;
 exports.UserProfileComponent = void 0;
 var core_1 = require("@angular/core");
 var UserProfileComponent = /** @class */ (function () {
-    function UserProfileComponent(fetchApiData, router, snackBar, fetchUsers) {
+    function UserProfileComponent(fetchApiData, router, snackBar, fetchUsers, dialog) {
         this.fetchApiData = fetchApiData;
         this.router = router;
         this.snackBar = snackBar;
         this.fetchUsers = fetchUsers;
+        this.dialog = dialog;
         this.userData = {
             username: '',
             password: '',
             email: '',
             birthday: ''
         };
-        this.FavoriteMovies = [];
         this.movies = [];
         this.user = {};
+        this.favorites = [];
+        this.FavoriteMovies = [];
         this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     }
     UserProfileComponent.prototype.ngOnInit = function () {
@@ -75,23 +77,21 @@ var UserProfileComponent = /** @class */ (function () {
     /**
      * Function to update user profile using FetchApiData
      */
-    /**updateUser(): void {
-      this.fetchApiData.editUser(this.userData).subscribe(
-        (updatedUser: any) => {
-          this.snackBar.open('User profile updated successfully', 'OK', {
-            duration: 2000
-          });
-          localStorage.setItem('user', JSON.stringify(updatedUser));
-          this.editUser(); // refresh user data
-        },
-        (error) => {
-          this.snackBar.open('Failed to update user profile', 'OK', {
-            duration: 2000
-          });
-          console.error('Error updating user:', error);
-        }
-      );
-    }*/
+    UserProfileComponent.prototype.updateUser = function () {
+        var _this = this;
+        this.fetchApiData.editUser(this.userData.Username, this.userData).subscribe(function (updatedUser) {
+            _this.snackBar.open('User profile updated successfully', 'OK', {
+                duration: 2000
+            });
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            _this.editUser(); // refresh user data
+        }, function (error) {
+            _this.snackBar.open('Failed to update user profile', 'OK', {
+                duration: 2000
+            });
+            console.error('Error updating user:', error);
+        });
+    };
     UserProfileComponent.prototype.resetUser = function () {
         this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     };

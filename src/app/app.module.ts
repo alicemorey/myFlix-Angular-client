@@ -14,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 import { AppComponent } from './app.component';
@@ -59,6 +60,7 @@ const appRoutes: Routes =[
     MatIconModule,
     MatGridListModule,
     RouterModule.forRoot (appRoutes),
+    MatTabsModule,
   ],
   exports:[RouterModule],
   providers: [

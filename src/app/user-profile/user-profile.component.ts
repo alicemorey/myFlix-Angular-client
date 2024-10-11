@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-profile',
@@ -19,15 +20,17 @@ export class UserProfileComponent implements OnInit {
     email: '',
     birthday: ''
   };
-  FavoriteMovies: any[] = [];
   movies: any[] = [];
   user: any = {};
+  favorites: any[] = [];
+  FavoriteMovies: any[] = [];
 
   constructor(
     public fetchApiData: UserRegistrationService,
     public router: Router,
     public snackBar: MatSnackBar,
     public fetchUsers: UserRegistrationService,
+    private dialog: MatDialog,
   
   ) {
 
@@ -80,11 +83,12 @@ showSynopsisAlert(synopsis: any): void {
   alert(synopsis);
 } 
 
+
 /**
  * Function to update user profile using FetchApiData
  */
-  /**updateUser(): void {
-    this.fetchApiData.editUser(this.userData).subscribe(
+  updateUser(): void {
+    this.fetchApiData.editUser(this.userData.Username, this.userData).subscribe(
       (updatedUser: any) => {
         this.snackBar.open('User profile updated successfully', 'OK', {
           duration: 2000
@@ -99,7 +103,7 @@ showSynopsisAlert(synopsis: any): void {
         console.error('Error updating user:', error);
       }
     );
-  }*/
+  }
 
   resetUser(): void {
     this.userData = JSON.parse(localStorage.getItem("user") || "{}");

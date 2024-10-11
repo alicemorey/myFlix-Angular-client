@@ -21,6 +21,7 @@ var dialog_1 = require("@angular/material/dialog");
 var snack_bar_1 = require("@angular/material/snack-bar");
 var icon_1 = require("@angular/material/icon");
 var grid_list_1 = require("@angular/material/grid-list");
+var tabs_1 = require("@angular/material/tabs");
 var app_component_1 = require("./app.component");
 var user_registration_form_component_1 = require("./user-registration-form/user-registration-form.component");
 var user_login_form_component_1 = require("./user-login-form/user-login-form.component");
@@ -63,6 +64,7 @@ var AppModule = /** @class */ (function () {
                 icon_1.MatIconModule,
                 grid_list_1.MatGridListModule,
                 router_1.RouterModule.forRoot(appRoutes),
+                tabs_1.MatTabsModule,
             ],
             exports: [router_1.RouterModule],
             providers: [
