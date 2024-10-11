@@ -22,6 +22,7 @@ var MovieCardComponent = /** @class */ (function () {
     };
     /**
      * Function to get all movies
+     * @returns array holding all movies
      */
     MovieCardComponent.prototype.getMovies = function () {
         var _this = this;
@@ -79,6 +80,11 @@ var MovieCardComponent = /** @class */ (function () {
             duration: 2000
         });
     };
+    /**
+     *
+     * @param movieId
+     * @returns favorite status of a movie
+     */
     MovieCardComponent.prototype.isFavorite = function (movieId) {
         var user = JSON.parse(localStorage.getItem('user') || '{}');
         var userFavorites = user.FavoriteMovies || [];

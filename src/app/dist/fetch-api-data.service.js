@@ -35,6 +35,11 @@ var UserRegistrationService = /** @class */ (function () {
         return rxjs_1.throwError('Something bad happened; please try again later.');
     };
     // Making the api call for the user registration endpoint
+    /**
+     * Function to register a new user
+     * @param userDetails
+     * @returns this user signed up
+     */
     UserRegistrationService.prototype.userRegistration = function (userDetails) {
         console.log(userDetails);
         //make a POST request to the user registration endpoint
@@ -43,11 +48,20 @@ var UserRegistrationService = /** @class */ (function () {
             .pipe(operators_1.catchError(this.handleError));
     };
     // User login endpoint
+    /**
+     * Function to login a user
+     * @param userDetails
+     * @returns thi user logged in
+     */
     UserRegistrationService.prototype.userLogin = function (userDetails) {
         return this.http
             .post(apiUrl + '/login', userDetails).pipe(operators_1.catchError(this.handleError));
     };
     //Get all movies endpoint
+    /**
+     * Function to get all movies
+     * @returns all movies
+     */
     UserRegistrationService.prototype.getAllMovies = function () {
         var token = localStorage.getItem('token');
         var headers = new http_1.HttpHeaders({
@@ -58,6 +72,11 @@ var UserRegistrationService = /** @class */ (function () {
             .pipe(operators_1.catchError(this.handleError));
     };
     // Get a single movie endpoint
+    /**
+     * Function to get one movie
+     * @param movie
+     * @returns one movie
+     */
     UserRegistrationService.prototype.getOneMovie = function (movie) {
         var token = localStorage.getItem('token');
         return this.http.get(apiUrl + "movies/" + movie._id, {
@@ -67,6 +86,11 @@ var UserRegistrationService = /** @class */ (function () {
         }).pipe(operators_1.catchError(this.handleError));
     };
     // get director endpoint
+    /**
+     * Function to get director
+     * @param directorName
+     * @returns
+     */
     UserRegistrationService.prototype.getDirector = function (directorName) {
         var token = localStorage.getItem('token');
         return this.http.get(apiUrl + 'movies/director/' + directorName, {
@@ -76,6 +100,11 @@ var UserRegistrationService = /** @class */ (function () {
         }).pipe(operators_1.catchError(this.handleError));
     };
     //get genre endpoint
+    /**
+     * Function to get genre
+     * @param genreName
+     * @returns
+     */
     UserRegistrationService.prototype.getGenre = function (genreName) {
         var token = localStorage.getItem('token');
         return this.http.get(apiUrl + 'movies/genre/' + genreName, {
@@ -85,6 +114,10 @@ var UserRegistrationService = /** @class */ (function () {
         }).pipe(operators_1.catchError(this.handleError));
     };
     //get user endpoint
+    /**
+     * Function to get user
+     * @returns this user
+     */
     UserRegistrationService.prototype.getUser = function () {
         var token = localStorage.getItem('token');
         return this.http.get(apiUrl + 'users', {
@@ -94,6 +127,10 @@ var UserRegistrationService = /** @class */ (function () {
         }).pipe(operators_1.catchError(this.handleError));
     };
     //get favorite movies endpoint
+    /**
+     * Function to get favorite movies
+     * @returns user's favorite movies
+     */
     UserRegistrationService.prototype.getFavoriteMovies = function () {
         var user = JSON.parse(localStorage.getItem('user') || '{}');
         var token = localStorage.getItem('token');
@@ -107,6 +144,12 @@ var UserRegistrationService = /** @class */ (function () {
         }));
     };
     // Add favorite movie endpoint
+    /**
+     * Function to add favorite movies
+     * @param username
+     * @param movieId
+     * @returns This movie added to user's favorite movies
+     */
     UserRegistrationService.prototype.addFavoriteMovies = function (username, movieId) {
         var token = localStorage.getItem('token'); // Retrieve the token from localStorage
         return this.http.post(apiUrl + "/users/" + username + "/movies/" + movieId, {}, // Since it's a POST request without a body, pass an empty object
@@ -119,6 +162,12 @@ var UserRegistrationService = /** @class */ (function () {
         );
     };
     //delete favorite movie endpoint
+    /**
+     * Function to delete favorite movies
+     * @param username
+     * @param movieId
+     * @returns this movies removed from user's favorite movies
+     */
     UserRegistrationService.prototype.deleteFavoriteMovies = function (username, movieId) {
         var token = localStorage.getItem('token');
         return this.http["delete"](apiUrl + "users/" + username + "/movies/" + movieId, {
@@ -128,10 +177,16 @@ var UserRegistrationService = /** @class */ (function () {
         }).pipe(operators_1.catchError(this.handleError));
     };
     //edit user endpoint
-    UserRegistrationService.prototype.editUser = function (userDetails) {
+    /**
+     * Function to edit user
+     * @param userDetails
+     * @param username
+     * @returns this user edited
+     */
+    UserRegistrationService.prototype.editUser = function (username, userDetails) {
         var token = localStorage.getItem('token');
         var user = JSON.parse(localStorage.getItem('user') || '{}');
-        return this.http.put(apiUrl + "users/" + user.Username, userDetails, {
+        return this.http.put(apiUrl + user / +username + userDetails, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })

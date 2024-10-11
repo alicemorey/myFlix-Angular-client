@@ -29,6 +29,7 @@ ngOnInit(): void {
 
 /**
  * Function to get all movies
+ * @returns array holding all movies
  */
 getMovies(): void {
   this.fetchApiData.getAllMovies().subscribe((resp: any) => {
@@ -84,6 +85,11 @@ getMovies(): void {
               duration: 2000
            });
         }
+        /**
+         * 
+         * @param movieId 
+         * @returns favorite status of a movie
+         */
         isFavorite(movieId: string): boolean {
           const user = JSON.parse(localStorage.getItem('user') || '{}');
           const userFavorites = user.FavoriteMovies || [];

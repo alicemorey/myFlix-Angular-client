@@ -38,6 +38,11 @@ private handleError(error: HttpErrorResponse): any {
 }
 
  // Making the api call for the user registration endpoint
+ /**
+  * Function to register a new user
+  * @param userDetails 
+  * @returns this user signed up
+  */
   public userRegistration(userDetails: any): Observable<any> {
     console.log(userDetails);
 
@@ -49,6 +54,11 @@ private handleError(error: HttpErrorResponse): any {
   }
 
   // User login endpoint
+  /**
+   * Function to login a user
+   * @param userDetails 
+   * @returns thi user logged in
+   */
   public userLogin(userDetails: any): Observable<any> {
     return this.http
     .post(apiUrl + '/login', userDetails).pipe(
@@ -57,7 +67,10 @@ private handleError(error: HttpErrorResponse): any {
   }
   
   //Get all movies endpoint
-
+/**
+ * Function to get all movies
+ * @returns all movies
+ */
   public getAllMovies(): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -69,6 +82,11 @@ private handleError(error: HttpErrorResponse): any {
     }
 
   // Get a single movie endpoint
+  /**
+   * Function to get one movie
+   * @param movie 
+   * @returns one movie
+   */
   public getOneMovie(movie: { _id: string }): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(`${apiUrl}movies/${movie._id}`, {
@@ -81,6 +99,11 @@ private handleError(error: HttpErrorResponse): any {
   }  
 
   // get director endpoint
+  /**
+   * Function to get director
+   * @param directorName 
+   * @returns 
+   */
   public getDirector(directorName: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'movies/director/' + directorName, {
@@ -93,6 +116,11 @@ private handleError(error: HttpErrorResponse): any {
   }
 
   //get genre endpoint
+  /**
+   * Function to get genre
+   * @param genreName 
+   * @returns 
+   */
   public getGenre(genreName: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'movies/genre/' + genreName, {
@@ -105,6 +133,10 @@ private handleError(error: HttpErrorResponse): any {
   }
 
   //get user endpoint
+  /**
+   * Function to get user
+   * @returns this user
+   */
   public getUser(): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'users', {
@@ -117,6 +149,10 @@ private handleError(error: HttpErrorResponse): any {
   }
 
   //get favorite movies endpoint
+  /**
+   * Function to get favorite movies
+   * @returns user's favorite movies
+   */
   public getFavoriteMovies(): Observable<any> {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
@@ -136,6 +172,12 @@ private handleError(error: HttpErrorResponse): any {
   }
   
 // Add favorite movie endpoint
+/**
+ * Function to add favorite movies
+ * @param username 
+ * @param movieId 
+ * @returns This movie added to user's favorite movies
+ */
 public addFavoriteMovies(username: string, movieId: string): Observable<any> {
   const token = localStorage.getItem('token'); // Retrieve the token from localStorage
 
@@ -155,6 +197,12 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
 
 
   //delete favorite movie endpoint
+  /**
+   * Function to delete favorite movies
+   * @param username 
+   * @param movieId 
+   * @returns this movies removed from user's favorite movies
+   */
   public deleteFavoriteMovies(username: string, movieId:string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.delete(`${apiUrl}users/${username}/movies/${movieId}`, {
@@ -165,11 +213,19 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
       catchError(this.handleError)
     );
   }
+
+
   //edit user endpoint
-  public editUser(userDetails: any): Observable<any> {
+  /**
+   * Function to edit user
+   * @param userDetails 
+   * @param username
+   * @returns this user edited
+   */
+  public editUser(username:String, userDetails: any): Observable<any> {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return this.http.put(`${apiUrl}users/${user.Username}`, userDetails, {
+    return this.http.put(apiUrl + user/ + username + userDetails, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
