@@ -90,13 +90,13 @@
           </ng-template>
         </div>
       </mat-tab>
-      <mat-tab label="Update my profile">
-        <app-update-user-form></app-update-user-form>
-      </mat-tab>
+    
+        <!-- Remove the app-update-user-form component -->
+    
     </mat-tab-group>
 
   <div class="action-buttons">
     <button mat-raised-button (click)="logOut()" color="primary">Logout</button>
     <button mat-raised-button (click)="navigateToMovies()" color="accent">Back to Movies</button>
-  </div>
+  </div>  </mat-grid-list>
 </div>
