@@ -193,9 +193,13 @@ var UserRegistrationService = /** @class */ (function () {
         }).pipe(operators_1.catchError(this.handleError));
     };
     //delete user
-    UserRegistrationService.prototype.deleteUser = function () {
+    /** Function to delete user
+     * @param username
+     * @returns this user deleted
+     */
+    UserRegistrationService.prototype.deleteUser = function (username) {
         var token = localStorage.getItem('token');
-        return this.http["delete"](apiUrl + 'users', {
+        return this.http["delete"](apiUrl + 'users/' + username, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })

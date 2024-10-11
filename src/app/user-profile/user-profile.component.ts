@@ -21,6 +21,7 @@ export class UserProfileComponent implements OnInit {
   };
   FavoriteMovies: any[] = [];
   movies: any[] = [];
+  user: any = {};
 
   constructor(
     public fetchApiData: UserRegistrationService,
@@ -55,7 +56,7 @@ export class UserProfileComponent implements OnInit {
  * Function to edit user using FetchApiData
  */
 editUser(): void {
-  this.fetchApiData.editUser(this.userData).subscribe((res: any) => {
+  this.fetchApiData.editUser( this.user.Username, this.userData).subscribe((res: any) => {
     this.userData = {
       ...res,
       id: res._id,
@@ -82,7 +83,7 @@ showSynopsisAlert(synopsis: any): void {
 /**
  * Function to update user profile using FetchApiData
  */
-  updateUser(): void {
+  /**updateUser(): void {
     this.fetchApiData.editUser(this.userData).subscribe(
       (updatedUser: any) => {
         this.snackBar.open('User profile updated successfully', 'OK', {
@@ -98,7 +99,7 @@ showSynopsisAlert(synopsis: any): void {
         console.error('Error updating user:', error);
       }
     );
-  }
+  }*/
 
   resetUser(): void {
     this.userData = JSON.parse(localStorage.getItem("user") || "{}");
@@ -131,9 +132,11 @@ showSynopsisAlert(synopsis: any): void {
 
   /**
    * Function to delete a user using FetchApiData
-   */
+   * 
+  */
   deleteUser(): void {
-    this.fetchApiData.deleteUser().subscribe(() => {
+    const username = JSON.parse(localStorage.getItem('user') || '{}').Username;
+    this.fetchApiData.deleteUser(username).subscribe(() => {
       localStorage.clear();
       this.router.navigate(['/welcome']);
       this.snackBar.open('User deleted successfully', 'OK', {

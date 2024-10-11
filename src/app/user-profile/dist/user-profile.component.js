@@ -33,6 +33,7 @@ var UserProfileComponent = /** @class */ (function () {
         };
         this.FavoriteMovies = [];
         this.movies = [];
+        this.user = {};
         this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     }
     UserProfileComponent.prototype.ngOnInit = function () {
@@ -56,7 +57,7 @@ var UserProfileComponent = /** @class */ (function () {
      */
     UserProfileComponent.prototype.editUser = function () {
         var _this = this;
-        this.fetchApiData.editUser(this.userData).subscribe(function (res) {
+        this.fetchApiData.editUser(this.user.Username, this.userData).subscribe(function (res) {
             _this.userData = __assign(__assign({}, res), { id: res._id, password: _this.userData.password, token: _this.userData.token });
             localStorage.setItem("user", JSON.stringify(_this.userData));
             console.log(_this.userData);
@@ -74,21 +75,23 @@ var UserProfileComponent = /** @class */ (function () {
     /**
      * Function to update user profile using FetchApiData
      */
-    UserProfileComponent.prototype.updateUser = function () {
-        var _this = this;
-        this.fetchApiData.editUser(this.userData).subscribe(function (updatedUser) {
-            _this.snackBar.open('User profile updated successfully', 'OK', {
-                duration: 2000
-            });
-            localStorage.setItem('user', JSON.stringify(updatedUser));
-            _this.editUser(); // refresh user data
-        }, function (error) {
-            _this.snackBar.open('Failed to update user profile', 'OK', {
-                duration: 2000
-            });
-            console.error('Error updating user:', error);
-        });
-    };
+    /**updateUser(): void {
+      this.fetchApiData.editUser(this.userData).subscribe(
+        (updatedUser: any) => {
+          this.snackBar.open('User profile updated successfully', 'OK', {
+            duration: 2000
+          });
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+          this.editUser(); // refresh user data
+        },
+        (error) => {
+          this.snackBar.open('Failed to update user profile', 'OK', {
+            duration: 2000
+          });
+          console.error('Error updating user:', error);
+        }
+      );
+    }*/
     UserProfileComponent.prototype.resetUser = function () {
         this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     };
@@ -119,10 +122,12 @@ var UserProfileComponent = /** @class */ (function () {
     };
     /**
      * Function to delete a user using FetchApiData
-     */
+     *
+    */
     UserProfileComponent.prototype.deleteUser = function () {
         var _this = this;
-        this.fetchApiData.deleteUser().subscribe(function () {
+        var username = JSON.parse(localStorage.getItem('user') || '{}').Username;
+        this.fetchApiData.deleteUser(username).subscribe(function () {
             localStorage.clear();
             _this.router.navigate(['/welcome']);
             _this.snackBar.open('User deleted successfully', 'OK', {
