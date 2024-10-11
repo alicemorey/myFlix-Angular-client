@@ -42,7 +42,7 @@ export class UserProfileComponent implements OnInit {
 //   this.fetchApiData.getUser().subscribe((resp: any) => {
 //     this.userData = {
 //       ...resp,
-//       id: resp._id,
+//  npm install --save-dev typedoc     id: resp._id,
 //       password: this.userData.password,
 //       token: this.userData.token
 //     };
@@ -79,6 +79,9 @@ showSynopsisAlert(synopsis: any): void {
   alert(synopsis);
 } 
 
+/**
+ * Function to update user profile using FetchApiData
+ */
   updateUser(): void {
     this.fetchApiData.editUser(this.userData).subscribe(
       (updatedUser: any) => {
@@ -113,6 +116,9 @@ showSynopsisAlert(synopsis: any): void {
     });
 }
 
+/** 
+ * Function to remove a movie from users favorites using FetchApiData
+ */
   removeFromFavorites(movieId: string): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.fetchApiData.deleteFavoriteMovies(user.Username, movieId).subscribe(() => {
@@ -123,6 +129,9 @@ showSynopsisAlert(synopsis: any): void {
     });
   }
 
+  /**
+   * Function to delete a user using FetchApiData
+   */
   deleteUser(): void {
     this.fetchApiData.deleteUser().subscribe(() => {
       localStorage.clear();

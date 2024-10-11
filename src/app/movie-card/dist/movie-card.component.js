@@ -20,6 +20,9 @@ var MovieCardComponent = /** @class */ (function () {
     MovieCardComponent.prototype.ngOnInit = function () {
         this.getMovies();
     };
+    /**
+     * Function to get all movies
+     */
     MovieCardComponent.prototype.getMovies = function () {
         var _this = this;
         this.fetchApiData.getAllMovies().subscribe(function (resp) {
@@ -35,6 +38,10 @@ var MovieCardComponent = /** @class */ (function () {
             console.log(err);
         });
     };
+    /**
+     * Function to add a movie to favorites
+     * @param movieId
+     */
     MovieCardComponent.prototype.addtoFavorites = function (movieId) {
         var _this = this;
         var user = JSON.parse(localStorage.getItem('user'));
@@ -52,6 +59,10 @@ var MovieCardComponent = /** @class */ (function () {
             duration: 2000
         });
     };
+    /**
+     * Function to remove a movie from favorites
+     * @param movieId
+     */
     MovieCardComponent.prototype.removeFromFavorites = function (movieId) {
         var _this = this;
         var user = JSON.parse(localStorage.getItem('user'));
@@ -73,13 +84,23 @@ var MovieCardComponent = /** @class */ (function () {
         var userFavorites = user.FavoriteMovies || [];
         return userFavorites.includes(movieId);
     };
+    /**
+     * Function to logout the user
+     */
     MovieCardComponent.prototype.logout = function () {
         this.router.navigate(["welcome"]);
         localStorage.removeItem("user");
     };
+    /**
+     * Function to redirect to profile page
+     */
     MovieCardComponent.prototype.redirectProfile = function () {
         this.router.navigate(["profile"]);
     };
+    /**
+     * Function to open a dialog box with movie details on genre
+     * @param genre
+     */
     MovieCardComponent.prototype.openGenreDialog = function (genre) {
         this.dialog.open(message_box_component_1.MessageBoxComponent, {
             data: {
@@ -89,6 +110,10 @@ var MovieCardComponent = /** @class */ (function () {
             width: '350px'
         });
     };
+    /**
+     * Function to open a dialog box with movie details on director
+     * @param movie
+     */
     MovieCardComponent.prototype.openDirectorDialog = function (movie) {
         this.dialog.open(message_box_component_1.MessageBoxComponent, {
             data: {
@@ -98,6 +123,10 @@ var MovieCardComponent = /** @class */ (function () {
             width: '350px'
         });
     };
+    /**
+     * Function to open a dialog box with movie details on synopsis
+     * @param movie
+     */
     MovieCardComponent.prototype.openSynopsisDialog = function (movie) {
         this.dialog.open(message_box_component_1.MessageBoxComponent, {
             data: {

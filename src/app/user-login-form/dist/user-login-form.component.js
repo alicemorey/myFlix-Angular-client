@@ -18,6 +18,9 @@ var UserLoginFormComponent = /** @class */ (function () {
     }
     UserLoginFormComponent.prototype.ngOnInit = function () {
     };
+    /**
+     * Function to login a user
+     */
     UserLoginFormComponent.prototype.loginUser = function () {
         var _this = this;
         this.fetchApiData.userLogin(this.userData).subscribe(function (result) {

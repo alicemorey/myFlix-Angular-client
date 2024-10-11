@@ -27,6 +27,9 @@ ngOnInit(): void {
   this.getMovies();
 }
 
+/**
+ * Function to get all movies
+ */
 getMovies(): void {
   this.fetchApiData.getAllMovies().subscribe((resp: any) => {
     console.log('Movies received:', resp);  
@@ -42,7 +45,10 @@ getMovies(): void {
     })
   }
 
-
+/**
+ * Function to add a movie to favorites
+ * @param movieId 
+ */
   addtoFavorites(movieId: any): void {
     const user = JSON.parse(localStorage.getItem('user') as any);
       this.fetchApiData
@@ -59,6 +65,10 @@ getMovies(): void {
           });
         }
         
+        /**
+         * Function to remove a movie from favorites
+         * @param movieId 
+         */
       removeFromFavorites(movieId: string): void {
           const user: any = JSON.parse(localStorage.getItem('user') as any);
           this.fetchApiData
@@ -81,7 +91,9 @@ getMovies(): void {
         }
         
         
- 
+ /**
+  * Function to logout the user
+  */
 
   logout(): void {
     this.router.navigate(["welcome"]);
@@ -89,10 +101,17 @@ getMovies(): void {
 
 }
 
+/**
+ * Function to redirect to profile page
+ */
   redirectProfile(): void {
   this.router.navigate(["profile"]);
 }
 
+/**
+ * Function to open a dialog box with movie details on genre
+ * @param genre 
+ */
 openGenreDialog(genre: string): void {
   this.dialog.open(MessageBoxComponent, {
     data: {
@@ -105,7 +124,10 @@ openGenreDialog(genre: string): void {
 
 
 
-
+/**
+ * Function to open a dialog box with movie details on director
+ * @param movie 
+ */
 openDirectorDialog(movie: any): void {
   this.dialog.open(MessageBoxComponent, {
     data: {
@@ -116,7 +138,10 @@ openDirectorDialog(movie: any): void {
   });
 }
 
-
+/**
+ * Function to open a dialog box with movie details on synopsis
+ * @param movie 
+ */
 openSynopsisDialog(movie:any): void {
   this.dialog.open(MessageBoxComponent, {
     data:{

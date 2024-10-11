@@ -24,6 +24,10 @@ export class UserLoginFormComponent implements OnInit {
     ngOnInit(): void {
   }
 
+  /**
+   * Function to login a user 
+   */
+
   loginUser(): void {
      this.fetchApiData.userLogin(this.userData).subscribe((result) => {
        this.dialogRef.close(); // This will close the modal on success!

@@ -17,6 +17,9 @@ export class MessageBoxComponent implements OnInit {
 
     ngOnInit(): void {}
 
+    /**
+     * Function to close the dialog box
+     */
     closeMessageBox(): void {
         this.dialogRef.close();
     }

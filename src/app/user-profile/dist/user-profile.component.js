@@ -43,7 +43,7 @@ var UserProfileComponent = /** @class */ (function () {
     //   this.fetchApiData.getUser().subscribe((resp: any) => {
     //     this.userData = {
     //       ...resp,
-    //       id: resp._id,
+    //  npm install --save-dev typedoc     id: resp._id,
     //       password: this.userData.password,
     //       token: this.userData.token
     //     };
@@ -71,6 +71,9 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.showSynopsisAlert = function (synopsis) {
         alert(synopsis);
     };
+    /**
+     * Function to update user profile using FetchApiData
+     */
     UserProfileComponent.prototype.updateUser = function () {
         var _this = this;
         this.fetchApiData.editUser(this.userData).subscribe(function (updatedUser) {
@@ -101,6 +104,9 @@ var UserProfileComponent = /** @class */ (function () {
             console.log('Favorite movies :', _this.FavoriteMovies);
         });
     };
+    /**
+     * Function to remove a movie from users favorites using FetchApiData
+     */
     UserProfileComponent.prototype.removeFromFavorites = function (movieId) {
         var _this = this;
         var user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -111,6 +117,9 @@ var UserProfileComponent = /** @class */ (function () {
             _this.getFavoriteMovies();
         });
     };
+    /**
+     * Function to delete a user using FetchApiData
+     */
     UserProfileComponent.prototype.deleteUser = function () {
         var _this = this;
         this.fetchApiData.deleteUser().subscribe(function () {
