@@ -55,7 +55,7 @@ var UserRegistrationService = /** @class */ (function () {
      */
     UserRegistrationService.prototype.userLogin = function (userDetails) {
         return this.http
-            .post(apiUrl + '/login', userDetails).pipe(operators_1.catchError(this.handleError));
+            .post(apiUrl + 'login', userDetails).pipe(operators_1.catchError(this.handleError));
     };
     //Get all movies endpoint
     /**
@@ -68,7 +68,7 @@ var UserRegistrationService = /** @class */ (function () {
             Authorization: 'Bearer ' + token
         });
         return this.http
-            .get(apiUrl + '/movies', { headers: headers })
+            .get(apiUrl + 'movies', { headers: headers })
             .pipe(operators_1.catchError(this.handleError));
     };
     // Get a single movie endpoint

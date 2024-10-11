@@ -61,7 +61,7 @@ private handleError(error: HttpErrorResponse): any {
    */
   public userLogin(userDetails: any): Observable<any> {
     return this.http
-    .post(apiUrl + '/login', userDetails).pipe(
+    .post(apiUrl + 'login', userDetails).pipe(
       catchError(this.handleError)
     );
   }
@@ -77,7 +77,7 @@ private handleError(error: HttpErrorResponse): any {
       Authorization: 'Bearer ' + token,
     });
     return this.http
-      .get(apiUrl + '/movies', { headers })
+      .get(apiUrl + 'movies', { headers })
         .pipe(catchError(this.handleError));
     }
 
