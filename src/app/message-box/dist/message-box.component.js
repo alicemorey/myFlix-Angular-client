@@ -18,6 +18,9 @@ var MessageBoxComponent = /** @class */ (function () {
         this.dialogRef = dialogRef;
     }
     MessageBoxComponent.prototype.ngOnInit = function () { };
+    /**
+     * Function to close the dialog box
+     */
     MessageBoxComponent.prototype.closeMessageBox = function () {
         this.dialogRef.close();
     };
