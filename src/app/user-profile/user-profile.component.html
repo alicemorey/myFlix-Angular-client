@@ -54,10 +54,24 @@
                   <button
                     mat-button
                     color="primary"
-                    (click)="openSynopsisDialog(movie)"
+                    (click)="showGenreAlert(movie.Genre)"
                   >
-                    Director
+                    Genre
                   </button>
+                  <button
+                  mat-button
+                  color="primary"
+                  (click)="showDirectorAlert(movie.Director.Bio)"
+              >
+                  Director
+              </button>
+              <button
+                  mat-button
+                  color="primary"
+                  (click)="showSynopsisAlert(movie.Description)"
+              >
+                  Synopsis
+              </button>
                 
                   <button
                     class="heart-icon"
