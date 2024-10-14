@@ -226,7 +226,7 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
     console.log('User details:', userDetails);
     console.log('Stored user:', user);
    
-    return this.http.put(`${apiUrl}user/${user.Username}`, userDetails, {
+    return this.http.put(`${apiUrl}users/${user.Username}`, userDetails, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -241,14 +241,13 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
    * @param username
    * @returns this user deleted
    */
-  public deleteUser(userID:String): Observable<any> {
-    const body=JSON.stringify({"id":userID});
+  public deleteUser(username:String): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.delete(apiUrl + 'users' + userID,
+    return this.http.delete(`${apiUrl}users/${username}`,
 
       { headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
-      }), body:body
+      })
     }).pipe(
       map(this.extractResponseData), catchError(this.handleError)
     );

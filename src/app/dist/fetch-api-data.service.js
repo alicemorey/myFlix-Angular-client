@@ -188,7 +188,7 @@ var UserRegistrationService = /** @class */ (function () {
         var user = JSON.parse(localStorage.getItem('user') || '{}');
         console.log('User details:', userDetails);
         console.log('Stored user:', user);
-        return this.http.put(apiUrl + "user/" + user.Username, userDetails, {
+        return this.http.put(apiUrl + "users/" + user.Username, userDetails, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })
@@ -199,12 +199,11 @@ var UserRegistrationService = /** @class */ (function () {
      * @param username
      * @returns this user deleted
      */
-    UserRegistrationService.prototype.deleteUser = function (userID) {
-        var body = JSON.stringify({ "id": userID });
+    UserRegistrationService.prototype.deleteUser = function (username) {
         var token = localStorage.getItem('token');
-        return this.http["delete"](apiUrl + 'users' + userID, { headers: new http_1.HttpHeaders({
+        return this.http["delete"](apiUrl + "users/" + username, { headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
-            }), body: body
+            })
         }).pipe(operators_1.map(this.extractResponseData), operators_1.catchError(this.handleError));
     };
     // Non-typed response extraction

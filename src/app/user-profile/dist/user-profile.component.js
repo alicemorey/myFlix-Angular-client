@@ -195,8 +195,8 @@ var UserProfileComponent = /** @class */ (function () {
     */
     UserProfileComponent.prototype.deleteUser = function () {
         var _this = this;
-        var userID = JSON.parse(localStorage.getItem('user') || '{}').userID;
-        this.fetchApiData.deleteUser(userID).subscribe(function () {
+        var user = JSON.parse(localStorage.getItem('user') || '{}').userID;
+        this.fetchApiData.deleteUser(user.Username).subscribe(function () {
             localStorage.clear();
             _this.router.navigate(['/welcome']);
             _this.snackBar.open('User deleted successfully', 'OK', {
