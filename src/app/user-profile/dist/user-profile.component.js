@@ -20,6 +20,7 @@ exports.__esModule = true;
 exports.UserProfileComponent = void 0;
 var core_1 = require("@angular/core");
 var message_box_component_1 = require("../message-box/message-box.component");
+var delete_user_component_1 = require("../delete-user/delete-user.component");
 var UserProfileComponent = /** @class */ (function () {
     function UserProfileComponent(fetchApiData, router, snackBar, fetchUsers, dialog) {
         this.fetchApiData = fetchApiData;
@@ -193,9 +194,20 @@ var UserProfileComponent = /** @class */ (function () {
      * Function to delete a user using FetchApiData
      *
     */
+    UserProfileComponent.prototype.openDeleteUserDialog = function () {
+        var _this = this;
+        var dialogRef = this.dialog.open(delete_user_component_1.DeleteUserComponent, {
+            width: '300px'
+        });
+        dialogRef.afterClosed().subscribe(function (result) {
+            if (result) {
+                _this.deleteUser();
+            }
+        });
+    };
     UserProfileComponent.prototype.deleteUser = function () {
         var _this = this;
-        var user = JSON.parse(localStorage.getItem('user') || '{}').userID;
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
         this.fetchApiData.deleteUser(user.Username).subscribe(function () {
             localStorage.clear();
             _this.router.navigate(['/welcome']);

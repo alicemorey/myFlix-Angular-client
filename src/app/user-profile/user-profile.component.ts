@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageBoxComponent } from '../message-box/message-box.component';
+import { DeleteUserComponent } from '../delete-user/delete-user.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -25,6 +26,7 @@ export class UserProfileComponent implements OnInit {
   user: any = {};
   favorites: any[] = [];
   FavoriteMovies: any[] = [];
+  DeleteUserComponent: any;
 
   constructor(
     public fetchApiData: UserRegistrationService,
@@ -214,8 +216,20 @@ openSynopsisDialog(movie:any): void {
    * Function to delete a user using FetchApiData
    * 
   */
+  openDeleteUserDialog(): void {
+    const dialogRef = this.dialog.open(DeleteUserComponent, {
+      width: '300px',
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteUser();
+      }
+    });
+  }
+  
   deleteUser(): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}').userID;
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.fetchApiData.deleteUser(user.Username).subscribe(() => {
       localStorage.clear();
       this.router.navigate(['/welcome']);
@@ -224,6 +238,7 @@ openSynopsisDialog(movie:any): void {
       });
     });
   }
+  
 
   /**
    * Function to log out the user
