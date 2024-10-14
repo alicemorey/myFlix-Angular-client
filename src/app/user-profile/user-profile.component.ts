@@ -215,8 +215,8 @@ openSynopsisDialog(movie:any): void {
    * 
   */
   deleteUser(): void {
-    const username = JSON.parse(localStorage.getItem('user') || '{}').Username;
-    this.fetchApiData.deleteUser(username).subscribe(() => {
+    const userID = JSON.parse(localStorage.getItem('user') || '{}').userID;
+    this.fetchApiData.deleteUser(userID).subscribe(() => {
       localStorage.clear();
       this.router.navigate(['/welcome']);
       this.snackBar.open('User deleted successfully', 'OK', {
