@@ -50,41 +50,27 @@ getMovies(): void {
  * Function to add a movie to favorites
  * @param movieId 
  */
-  addtoFavorites(movieId: any): void {
-    const user = JSON.parse(localStorage.getItem('user') as any);
-      this.fetchApiData
+  addtoFavorites(movieId: string): void {
+    const user = JSON.parse(localStorage.getItem ('user') || '{}');
+    
+    console.log('user', user);
+    console.log('Movie ID:', movieId);
+    
+    this.fetchApiData
       .addFavoriteMovies(user.Username, movieId)
-      .subscribe((res:any) => {
-          console.log('Movie added to favorites', res);
-          //update local storage
-          user.FavoriteMovies = user.FavoriteMovies || [];
-          user.FavoriteMovies.push(movieId);
-          localStorage.setItem('user', JSON.stringify(user));
-          this.getMovies();
-      });          this.snackBar.open('Movie added to favorites', 'OK', {
-            duration: 2000
-          });
-        }
+      .subscribe((res: any) => {
+        console.log('Movie added to favorites', res);
+        //update local storage
+        user.FavoriteMovies = user.FavoriteMovies || [];
+        user.FavoriteMovies.push(movieId);
+        localStorage.setItem('user', JSON.stringify(user));
+        this.getMovies();
+      });
+    this.snackBar.open('Movie added to favorites', 'OK', {
+      duration: 2000
+    });
+  }        
         
-        /**
-         * Function to remove a movie from favorites
-         * @param movieId 
-         */
-      removeFromFavorites(movieId: string): void {
-          const user: any = JSON.parse(localStorage.getItem('user') as any);
-          this.fetchApiData
-            .deleteFavoriteMovies(user.Username,movieId)
-            .subscribe((res: any) => {
-              console.log(res);
-              //update local storage
-              user.FavoriteMovies = user.FavoriteMovies.filter((id: string) => id !== movieId);
-              localStorage.setItem('user', JSON.stringify(user));
-              this.getMovies();
-            });
-            this.snackBar.open("movie removed from favorites", 'OK', {
-              duration: 2000
-           });
-        }
         /**
          * 
          * @param movieId 

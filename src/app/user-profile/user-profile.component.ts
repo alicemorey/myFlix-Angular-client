@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { MessageBoxComponent } from '../message-box/message-box.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -71,6 +72,7 @@ editUser(): void {
   });
 }
 
+/**
 showGenreAlert(genre: any): void {
   alert(genre);
 }
@@ -81,9 +83,54 @@ showDirectorAlert(director: any): void {
 
 showSynopsisAlert(synopsis: any): void {
   alert(synopsis);
-} 
+} */
+
+/**
+ * Function to open a dialog box with movie details on genre
+ * @param genre 
+ */
+openGenreDialog(genre: string): void {
+  this.dialog.open(MessageBoxComponent, {
+    data: {
+      title: 'Genre',
+      content: genre
+    },
+    width: '350px'
+  });
+}
 
 
+
+/**
+ * Function to open a dialog box with movie details on director
+ * @param movie 
+ */
+openDirectorDialog(movie: any): void {
+  this.dialog.open(MessageBoxComponent, {
+    data: {
+      title: movie.Director.Name,
+      content: `Bio: ${movie.Director.Bio}\nBirth: ${movie.Director.Birth}`
+    },
+    width: '350px'
+  });
+}
+
+/**
+ * Function to open a dialog box with movie details on synopsis
+ * @param movie 
+ */
+openSynopsisDialog(movie:any): void {
+  this.dialog.open(MessageBoxComponent, {
+    data:{
+    
+      content: movie.Description
+    },
+    width: '350px'
+  });
+}
+
+
+ 
 /**
  * Function to update user profile using FetchApiData
  */
@@ -114,25 +161,44 @@ showSynopsisAlert(synopsis: any): void {
    */
   getFavoriteMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
-        this.FavoriteMovies = resp.filter((m : any) => {
+        this.favorites =this.FavoriteMovies = resp.filter((m : any) => {
           return this.userData.FavoriteMovies.includes(m._id);
         });
-        console.log('Favorite movies :', this.FavoriteMovies);
+        console.log('Favorite movies :', this.favorites);
     });
 }
 
-/** 
- * Function to remove a movie from users favorites using FetchApiData
- */
+      /**
+         * Function to remove a movie from favorites
+         * @param movieId 
+         */
   removeFromFavorites(movieId: string): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.fetchApiData.deleteFavoriteMovies(user.Username, movieId).subscribe(() => {
-      this.snackBar.open('Movie removed from favorites', 'OK', {
-        duration: 2000
-      });
+    const user: any = JSON.parse(localStorage.getItem('user') as any);
+    this.fetchApiData
+    .deleteFavoriteMovies(user.Username,movieId)
+    .subscribe((res: any) => {
+      console.log(res);
+      //update local storage
+      user.FavoriteMovies = user.FavoriteMovies.filter((id: string) => id !== movieId);
+      localStorage.setItem('user', JSON.stringify(user));
       this.getFavoriteMovies();
     });
-  }
+    this.snackBar.open("movie removed from favorites", 'OK', {
+      duration: 2000
+   });
+}
+
+        /**
+         * 
+         * @param movieId 
+         * @returns favorite status of a movie
+         */
+    isFavorite(movieId: string): boolean {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userFavorites = user.FavoriteMovies || [];
+        return userFavorites.includes(movieId);
+      }
+
 
   /**
    * Function to delete a user using FetchApiData

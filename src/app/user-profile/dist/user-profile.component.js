@@ -19,6 +19,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.UserProfileComponent = void 0;
 var core_1 = require("@angular/core");
+var message_box_component_1 = require("../message-box/message-box.component");
 var UserProfileComponent = /** @class */ (function () {
     function UserProfileComponent(fetchApiData, router, snackBar, fetchUsers, dialog) {
         this.fetchApiData = fetchApiData;
@@ -65,14 +66,55 @@ var UserProfileComponent = /** @class */ (function () {
             console.log(_this.userData);
         });
     };
-    UserProfileComponent.prototype.showGenreAlert = function (genre) {
-        alert(genre);
+    /**
+    showGenreAlert(genre: any): void {
+      alert(genre);
+    }
+    
+    showDirectorAlert(director: any): void {
+      alert(director);
+    }
+    
+    showSynopsisAlert(synopsis: any): void {
+      alert(synopsis);
+    } */
+    /**
+     * Function to open a dialog box with movie details on genre
+     * @param genre
+     */
+    UserProfileComponent.prototype.openGenreDialog = function (genre) {
+        this.dialog.open(message_box_component_1.MessageBoxComponent, {
+            data: {
+                title: 'Genre',
+                content: genre
+            },
+            width: '350px'
+        });
     };
-    UserProfileComponent.prototype.showDirectorAlert = function (director) {
-        alert(director);
+    /**
+     * Function to open a dialog box with movie details on director
+     * @param movie
+     */
+    UserProfileComponent.prototype.openDirectorDialog = function (movie) {
+        this.dialog.open(message_box_component_1.MessageBoxComponent, {
+            data: {
+                title: movie.Director.Name,
+                content: "Bio: " + movie.Director.Bio + "\nBirth: " + movie.Director.Birth
+            },
+            width: '350px'
+        });
     };
-    UserProfileComponent.prototype.showSynopsisAlert = function (synopsis) {
-        alert(synopsis);
+    /**
+     * Function to open a dialog box with movie details on synopsis
+     * @param movie
+     */
+    UserProfileComponent.prototype.openSynopsisDialog = function (movie) {
+        this.dialog.open(message_box_component_1.MessageBoxComponent, {
+            data: {
+                content: movie.Description
+            },
+            width: '350px'
+        });
     };
     /**
      * Function to update user profile using FetchApiData
@@ -101,24 +143,41 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.getFavoriteMovies = function () {
         var _this = this;
         this.fetchApiData.getAllMovies().subscribe(function (resp) {
-            _this.FavoriteMovies = resp.filter(function (m) {
+            _this.favorites = _this.FavoriteMovies = resp.filter(function (m) {
                 return _this.userData.FavoriteMovies.includes(m._id);
             });
-            console.log('Favorite movies :', _this.FavoriteMovies);
+            console.log('Favorite movies :', _this.favorites);
         });
     };
     /**
-     * Function to remove a movie from users favorites using FetchApiData
-     */
+       * Function to remove a movie from favorites
+       * @param movieId
+       */
     UserProfileComponent.prototype.removeFromFavorites = function (movieId) {
         var _this = this;
-        var user = JSON.parse(localStorage.getItem('user') || '{}');
-        this.fetchApiData.deleteFavoriteMovies(user.Username, movieId).subscribe(function () {
-            _this.snackBar.open('Movie removed from favorites', 'OK', {
-                duration: 2000
-            });
+        var user = JSON.parse(localStorage.getItem('user'));
+        this.fetchApiData
+            .deleteFavoriteMovies(user.Username, movieId)
+            .subscribe(function (res) {
+            console.log(res);
+            //update local storage
+            user.FavoriteMovies = user.FavoriteMovies.filter(function (id) { return id !== movieId; });
+            localStorage.setItem('user', JSON.stringify(user));
             _this.getFavoriteMovies();
         });
+        this.snackBar.open("movie removed from favorites", 'OK', {
+            duration: 2000
+        });
+    };
+    /**
+     *
+     * @param movieId
+     * @returns favorite status of a movie
+     */
+    UserProfileComponent.prototype.isFavorite = function (movieId) {
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
+        var userFavorites = user.FavoriteMovies || [];
+        return userFavorites.includes(movieId);
     };
     /**
      * Function to delete a user using FetchApiData

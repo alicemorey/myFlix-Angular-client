@@ -45,7 +45,9 @@ var MovieCardComponent = /** @class */ (function () {
      */
     MovieCardComponent.prototype.addtoFavorites = function (movieId) {
         var _this = this;
-        var user = JSON.parse(localStorage.getItem('user'));
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
+        console.log('user', user);
+        console.log('Movie ID:', movieId);
         this.fetchApiData
             .addFavoriteMovies(user.Username, movieId)
             .subscribe(function (res) {
@@ -57,26 +59,6 @@ var MovieCardComponent = /** @class */ (function () {
             _this.getMovies();
         });
         this.snackBar.open('Movie added to favorites', 'OK', {
-            duration: 2000
-        });
-    };
-    /**
-     * Function to remove a movie from favorites
-     * @param movieId
-     */
-    MovieCardComponent.prototype.removeFromFavorites = function (movieId) {
-        var _this = this;
-        var user = JSON.parse(localStorage.getItem('user'));
-        this.fetchApiData
-            .deleteFavoriteMovies(user.Username, movieId)
-            .subscribe(function (res) {
-            console.log(res);
-            //update local storage
-            user.FavoriteMovies = user.FavoriteMovies.filter(function (id) { return id !== movieId; });
-            localStorage.setItem('user', JSON.stringify(user));
-            _this.getMovies();
-        });
-        this.snackBar.open("movie removed from favorites", 'OK', {
             duration: 2000
         });
     };

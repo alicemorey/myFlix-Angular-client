@@ -19,7 +19,7 @@
     
             
             <mat-card-content class="movie-card">
-                <img mat-card-image src={{movie.ImagePath}} alt={{movie.Title}} />
+                <img mat-card-image [src]="movie.ImagePath" [alt]="movie.Title" />
     
             </mat-card-content>
   
@@ -27,14 +27,14 @@
             <button mat-button color="primary" (click)="openGenreDialog(movie.Genre)">Genre</button>
             <button mat-button color="primary" (click)="openDirectorDialog(movie)">Director</button>
             <button mat-button color="primary" (click)="openSynopsisDialog(movie)">Synopsis</button>
-            <mat-icon *ngIf="!isFavorite(movie._id)" (click)="addtoFavorites(movie)">favorite_border</mat-icon>
-            <mat-icon *ngIf="!isFavorite(movie._id)" (click)="removeFromFavorites(movie._id)">favorite</mat-icon>
+            <mat-icon *ngIf="!isFavorite(movie._id)" (click)="addtoFavorites(movie._id)">favorite_border</mat-icon>
     
           </mat-card-actions>
         </mat-card>
       </mat-grid-tile>
     </mat-grid-list>
 </div>
+
 
   
 

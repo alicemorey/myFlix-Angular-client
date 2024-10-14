@@ -79,7 +79,7 @@ var UserRegistrationService = /** @class */ (function () {
      */
     UserRegistrationService.prototype.getOneMovie = function (movie) {
         var token = localStorage.getItem('token');
-        return this.http.get(apiUrl + "movies/" + movie._id, {
+        return this.http.get(apiUrl + 'movies' + movie._id, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })
@@ -134,7 +134,7 @@ var UserRegistrationService = /** @class */ (function () {
     UserRegistrationService.prototype.getFavoriteMovies = function () {
         var user = JSON.parse(localStorage.getItem('user') || '{}');
         var token = localStorage.getItem('token');
-        return this.http.get(apiUrl + "users/" + user.Username + "/movies", {
+        return this.http.get(apiUrl + 'user/' + user.Username + '/movies', {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })
@@ -152,7 +152,7 @@ var UserRegistrationService = /** @class */ (function () {
      */
     UserRegistrationService.prototype.addFavoriteMovies = function (username, movieId) {
         var token = localStorage.getItem('token'); // Retrieve the token from localStorage
-        return this.http.post(apiUrl + "/users/" + username + "/movies/" + movieId, {}, // Since it's a POST request without a body, pass an empty object
+        return this.http.post(apiUrl + "users/" + username + "/movies/" + movieId, {}, // Since it's a POST request without a body, pass an empty object
         {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token,
