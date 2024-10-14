@@ -57,14 +57,45 @@ var UserProfileComponent = /** @class */ (function () {
     // }
     /**
      * Function to edit user using FetchApiData
+     
+    editUser(): void {
+      this.fetchApiData.editUser( this.user.Username, this.userData).subscribe((res: any) => {
+        this.userData = {
+          ...res,
+          id: res._id,
+          password: this.userData.password,
+          token: this.userData.token
+        };
+        localStorage.setItem("user", JSON.stringify(this.userData));
+        console.log(this.userData);
+      });
+    }*/
+    /**
+     * Function to update user profile using FetchApiData
      */
-    UserProfileComponent.prototype.editUser = function () {
+    UserProfileComponent.prototype.updateUser = function () {
         var _this = this;
-        this.fetchApiData.editUser(this.user.Username, this.userData).subscribe(function (res) {
-            _this.userData = __assign(__assign({}, res), { id: res._id, password: _this.userData.password, token: _this.userData.token });
-            localStorage.setItem("user", JSON.stringify(_this.userData));
-            console.log(_this.userData);
+        console.log('Updating user with data:', this.userData);
+        this.fetchApiData.editUser(this.userData).subscribe({
+            next: function (res) {
+                console.log('Update successful:', res);
+                _this.userData = __assign(__assign({}, res), { id: res._id, password: _this.userData.password, token: _this.userData.token });
+                _this.snackBar.open('User profile updated successfully', 'OK', {
+                    duration: 2000
+                });
+                localStorage.setItem('user', JSON.stringify(_this.userData));
+                _this.getFavoriteMovies(); // refresh user data
+            },
+            error: function (error) {
+                _this.snackBar.open('Failed to update user profile', 'OK', {
+                    duration: 2000
+                });
+                console.error('Error updating user:', error);
+            }
         });
+    };
+    UserProfileComponent.prototype.resetUser = function () {
+        this.user = JSON.parse(localStorage.getItem("user") || "{}");
     };
     /**
     showGenreAlert(genre: any): void {
@@ -115,27 +146,6 @@ var UserProfileComponent = /** @class */ (function () {
             },
             width: '350px'
         });
-    };
-    /**
-     * Function to update user profile using FetchApiData
-     */
-    UserProfileComponent.prototype.updateUser = function () {
-        var _this = this;
-        this.fetchApiData.editUser(this.userData.Username, this.userData).subscribe(function (updatedUser) {
-            _this.snackBar.open('User profile updated successfully', 'OK', {
-                duration: 2000
-            });
-            localStorage.setItem('user', JSON.stringify(updatedUser));
-            _this.editUser(); // refresh user data
-        }, function (error) {
-            _this.snackBar.open('Failed to update user profile', 'OK', {
-                duration: 2000
-            });
-            console.error('Error updating user:', error);
-        });
-    };
-    UserProfileComponent.prototype.resetUser = function () {
-        this.userData = JSON.parse(localStorage.getItem("user") || "{}");
     };
     /**
    * Function to get users favorite movies using FetchApiData

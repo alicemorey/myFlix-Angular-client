@@ -183,10 +183,12 @@ var UserRegistrationService = /** @class */ (function () {
      * @param username
      * @returns this user edited
      */
-    UserRegistrationService.prototype.editUser = function (username, userDetails) {
+    UserRegistrationService.prototype.editUser = function (userDetails) {
         var token = localStorage.getItem('token');
         var user = JSON.parse(localStorage.getItem('user') || '{}');
-        return this.http.put(apiUrl + user / +username + userDetails, {
+        console.log('User details:', userDetails);
+        console.log('Stored user:', user);
+        return this.http.put(apiUrl + "user/" + user.Username, userDetails, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })
@@ -197,13 +199,18 @@ var UserRegistrationService = /** @class */ (function () {
      * @param username
      * @returns this user deleted
      */
-    UserRegistrationService.prototype.deleteUser = function (username) {
+    UserRegistrationService.prototype.deleteUser = function (userID) {
+        var body = JSON.stringify({ "id": userID });
         var token = localStorage.getItem('token');
-        return this.http["delete"](apiUrl + 'users/' + username, {
-            headers: new http_1.HttpHeaders({
+        return this.http["delete"](apiUrl + 'users' + userID, { headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
-            })
-        }).pipe(operators_1.catchError(this.handleError));
+            }), body: body
+        }).pipe(operators_1.map(this.extractResponseData), operators_1.catchError(this.handleError));
+    };
+    // Non-typed response extraction
+    UserRegistrationService.prototype.extractResponseData = function (res) {
+        var body = res;
+        return body || {};
     };
     UserRegistrationService = __decorate([
         core_1.Injectable({

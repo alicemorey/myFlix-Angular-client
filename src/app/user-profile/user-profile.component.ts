@@ -58,7 +58,7 @@ export class UserProfileComponent implements OnInit {
 
 /**
  * Function to edit user using FetchApiData
- */
+ 
 editUser(): void {
   this.fetchApiData.editUser( this.user.Username, this.userData).subscribe((res: any) => {
     this.userData = {
@@ -70,6 +70,39 @@ editUser(): void {
     localStorage.setItem("user", JSON.stringify(this.userData));
     console.log(this.userData);
   });
+}*/
+
+/**
+ * Function to update user profile using FetchApiData
+ */
+updateUser(): void {
+  console.log('Updating user with data:', this.userData);
+  this.fetchApiData.editUser(this.userData).subscribe({
+    next: (res: any) => {
+    console.log('Update successful:', res);
+    this.userData = {
+      ...res,
+      id: res._id,
+      password: this.userData.password,
+      token: this.userData.token
+    };
+      this.snackBar.open('User profile updated successfully', 'OK', {
+        duration: 2000
+      });
+      localStorage.setItem('user', JSON.stringify(this.userData));
+      this.getFavoriteMovies(); // refresh user data
+    },
+    error: (error) => {
+      this.snackBar.open('Failed to update user profile', 'OK', {
+        duration: 2000
+      });
+      console.error('Error updating user:', error);
+    }
+});
+}
+
+resetUser(): void {
+  this.user = JSON.parse(localStorage.getItem("user") || "{}");
 }
 
 /**
@@ -131,30 +164,7 @@ openSynopsisDialog(movie:any): void {
 
 
  
-/**
- * Function to update user profile using FetchApiData
- */
-  updateUser(): void {
-    this.fetchApiData.editUser(this.userData.Username, this.userData).subscribe(
-      (updatedUser: any) => {
-        this.snackBar.open('User profile updated successfully', 'OK', {
-          duration: 2000
-        });
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        this.editUser(); // refresh user data
-      },
-      (error) => {
-        this.snackBar.open('Failed to update user profile', 'OK', {
-          duration: 2000
-        });
-        console.error('Error updating user:', error);
-      }
-    );
-  }
 
-  resetUser(): void {
-    this.userData = JSON.parse(localStorage.getItem("user") || "{}");
-  }
 
   /**
  * Function to get users favorite movies using FetchApiData

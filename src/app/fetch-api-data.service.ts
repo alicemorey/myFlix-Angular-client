@@ -220,10 +220,13 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
    * @param username
    * @returns this user edited
    */
-  public editUser(username:String, userDetails: any): Observable<any> {
+  public editUser(userDetails: any): Observable<any> {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return this.http.put(apiUrl + user/ + username + userDetails, {
+    console.log('User details:', userDetails);
+    console.log('Stored user:', user);
+   
+    return this.http.put(`${apiUrl}user/${user.Username}`, userDetails, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -238,14 +241,23 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
    * @param username
    * @returns this user deleted
    */
-  public deleteUser(username:String): Observable<any> {
+  public deleteUser(userID:String): Observable<any> {
+    const body=JSON.stringify({"id":userID});
     const token = localStorage.getItem('token');
-    return this.http.delete(apiUrl + 'users/' + username, {
-      headers: new HttpHeaders({
+    return this.http.delete(apiUrl + 'users' + userID,
+
+      { headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
-      })
+      }), body:body
     }).pipe(
-      catchError(this.handleError)
+      map(this.extractResponseData), catchError(this.handleError)
     );
   }
+
+  // Non-typed response extraction
+  private extractResponseData(res: any): any {
+    const body = res;
+    return body || { };
 }
+}
+
