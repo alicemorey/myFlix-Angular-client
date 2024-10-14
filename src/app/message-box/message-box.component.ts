@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   templateUrl: './message-box.component.html',
   styleUrl: './message-box.component.scss'
 })
+
 export class MessageBoxComponent implements OnInit {
     constructor(@Inject(MAT_DIALOG_DATA)
         public data: {
