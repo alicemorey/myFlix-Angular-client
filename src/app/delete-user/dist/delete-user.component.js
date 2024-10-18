@@ -11,7 +11,18 @@ var core_1 = require("@angular/core");
 var DeleteUserComponent = /** @class */ (function () {
     function DeleteUserComponent(dialogRef) {
         this.dialogRef = dialogRef;
+        this.confirmDelete = new core_1.EventEmitter();
     }
+    DeleteUserComponent.prototype.onConfirmDelete = function () {
+        this.confirmDelete.emit();
+        this.dialogRef.close(true);
+    };
+    DeleteUserComponent.prototype.onCancelDelete = function () {
+        this.dialogRef.close(false);
+    };
+    __decorate([
+        core_1.Output()
+    ], DeleteUserComponent.prototype, "confirmDelete");
     DeleteUserComponent = __decorate([
         core_1.Component({
             selector: 'app-delete-user',

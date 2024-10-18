@@ -9,8 +9,8 @@ exports.__esModule = true;
 exports.UserRegistrationFormComponent = void 0;
 var core_1 = require("@angular/core");
 var UserRegistrationFormComponent = /** @class */ (function () {
-    function UserRegistrationFormComponent(fetchApiData, dialogRef, snackBar) {
-        this.fetchApiData = fetchApiData;
+    function UserRegistrationFormComponent(FetchApiDataService, dialogRef, snackBar) {
+        this.FetchApiDataService = FetchApiDataService;
         this.dialogRef = dialogRef;
         this.snackBar = snackBar;
         this.userData = { Username: '', Password: '', Email: '', Birthday: '' };
@@ -23,18 +23,21 @@ var UserRegistrationFormComponent = /** @class */ (function () {
      */
     UserRegistrationFormComponent.prototype.registerUser = function () {
         var _this = this;
-        this.fetchApiData.userRegistration(this.userData).subscribe(function (response) {
-            // Logic for a successful user registration goes here! (To be implemented)
-            _this.dialogRef.close(); // This will close the modal on success!
-            console.log(response);
-            _this.snackBar.open('user resigisted successfully!', 'OK', {
-                duration: 2000
-            });
-        }, function (response) {
-            console.log(response);
-            _this.snackBar.open(response, 'OK', {
-                duration: 2000
-            });
+        this.FetchApiDataService.userRegistrationService(this.userData).subscribe({
+            next: function (response) {
+                // Logic for a successful user registration goes here! (To be implemented)
+                _this.dialogRef.close(); // This will close the modal on success!
+                console.log(response);
+                _this.snackBar.open('user registered successfully!', 'OK', {
+                    duration: 2000
+                });
+            },
+            error: function (error) {
+                console.log('Full error response:', error);
+                _this.snackBar.open(error.message || 'Registration failed', 'OK', {
+                    duration: 2000
+                });
+            }
         });
     };
     __decorate([

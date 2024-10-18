@@ -77,7 +77,7 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.updateUser = function () {
         var _this = this;
         console.log('Updating user with data:', this.userData);
-        this.fetchApiData.editUser(this.userData).subscribe({
+        this.fetchApiData.updateUser(this.userData).subscribe({
             next: function (res) {
                 console.log('Update successful:', res);
                 _this.userData = __assign(__assign({}, res), { id: res._id, password: _this.userData.password, token: _this.userData.token });
@@ -194,13 +194,18 @@ var UserProfileComponent = /** @class */ (function () {
      * Function to delete a user using FetchApiData
      *
     */
+    //opens a dialog box to confirm deletion of user
     UserProfileComponent.prototype.openDeleteUserDialog = function () {
         var _this = this;
         var dialogRef = this.dialog.open(delete_user_component_1.DeleteUserComponent, {
             width: '300px'
         });
+        var deleteComponent = dialogRef.componentInstance;
+        deleteComponent.confirmDelete.subscribe(function () {
+            _this.deleteUser();
+        });
         dialogRef.afterClosed().subscribe(function (result) {
-            if (result) {
+            if (result === true) {
                 _this.deleteUser();
             }
         });
@@ -208,12 +213,22 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.deleteUser = function () {
         var _this = this;
         var user = JSON.parse(localStorage.getItem('user') || '{}');
-        this.fetchApiData.deleteUser(user.Username).subscribe(function () {
-            localStorage.clear();
-            _this.router.navigate(['/welcome']);
-            _this.snackBar.open('User deleted successfully', 'OK', {
-                duration: 2000
-            });
+        console.log('Deleting user:', user);
+        this.fetchApiData.deleteUser(user.Username).subscribe({
+            next: function () {
+                console.log('User deleted successfully');
+                localStorage.clear();
+                _this.router.navigate(['/welcome']);
+                _this.snackBar.open('User deleted successfully', 'OK', {
+                    duration: 2000
+                });
+            },
+            error: function (error) {
+                console.error('Error deleting user:', error);
+                _this.snackBar.open('Failed to delete user', 'OK', {
+                    duration: 2000
+                });
+            }
         });
     };
     /**

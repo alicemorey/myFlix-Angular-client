@@ -1,5 +1,5 @@
 
-import { UserRegistrationService } from '../fetch-api-data.service';
+import { FetchApiDataService } from '../fetch-api-data.service';
 
 import { Component, OnInit } from '@angular/core';
 
@@ -29,10 +29,10 @@ export class UserProfileComponent implements OnInit {
   DeleteUserComponent: any;
 
   constructor(
-    public fetchApiData: UserRegistrationService,
+    public fetchApiData: FetchApiDataService,
     public router: Router,
     public snackBar: MatSnackBar,
-    public fetchUsers: UserRegistrationService,
+    public fetchUsers: FetchApiDataService,
     private dialog: MatDialog,
   
   ) {
@@ -79,7 +79,7 @@ editUser(): void {
  */
 updateUser(): void {
   console.log('Updating user with data:', this.userData);
-  this.fetchApiData.editUser(this.userData).subscribe({
+  this.fetchApiData.updateUser(this.userData).subscribe({
     next: (res: any) => {
     console.log('Update successful:', res);
     this.userData = {
@@ -216,13 +216,19 @@ openSynopsisDialog(movie:any): void {
    * Function to delete a user using FetchApiData
    * 
   */
+ //opens a dialog box to confirm deletion of user
   openDeleteUserDialog(): void {
     const dialogRef = this.dialog.open(DeleteUserComponent, {
       width: '300px',
     });
+
+    const deleteComponent = dialogRef.componentInstance;
+    deleteComponent.confirmDelete.subscribe(() => {
+    this.deleteUser();
+    });
   
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result=== true) {
         this.deleteUser();
       }
     });
@@ -230,15 +236,26 @@ openSynopsisDialog(movie:any): void {
   
   deleteUser(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.fetchApiData.deleteUser(user.Username).subscribe(() => {
-      localStorage.clear();
-      this.router.navigate(['/welcome']);
-      this.snackBar.open('User deleted successfully', 'OK', {
+    console.log('Deleting user:', user);
+
+    this.fetchApiData.deleteUser(user.Username).subscribe({
+      next:() => {
+        console.log('User deleted successfully');
+        localStorage.clear();
+        this.router.navigate(['/welcome']);
+        this.snackBar.open('User deleted successfully', 'OK', {
         duration: 2000
       });
-    });
+    },
+    error: (error) => {
+      console.error('Error deleting user:', error);
+      this.snackBar.open('Failed to delete user', 'OK', {
+        duration: 2000
+      });
+    }
+  });
   }
-  
+
 
   /**
    * Function to log out the user

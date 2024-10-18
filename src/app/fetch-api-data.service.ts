@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import {map, catchError } from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-
+import { Observable, throwError,  catchError } from 'rxjs';
 
 
 //Declaring the api url that will provide data for the client app
@@ -12,59 +11,45 @@ const apiUrl = 'https://myflix-movies2024-b07bf2b16bbc.herokuapp.com/';
   providedIn: 'root'
 })
 
-export class UserRegistrationService {
+export class FetchApiDataService {
   // Inject the HttpClient module to the constructor params
  // This will provide HttpClient to the entire class, making it available via this.http
   constructor(private http: HttpClient) {
-
   }
 
-  private getToken(): string {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user).token : '';
-}
-
- // handle API errors
-private handleError(error: HttpErrorResponse): any {
-    if (error.error instanceof ErrorEvent) {
-        console.error('Some error occurred:', error.error.message);
-    } else {
-        console.error(
-            `Error Status code ${error.status}, ` +
-            `Error body is: ${error.error}`
-        );
-    }
-    return throwError('Something bad happened; please try again later.');
-}
-
+    
  // Making the api call for the user registration endpoint
  /**
   * Function to register a new user
-  * @param userDetails 
+  * @param userData
   * @returns this user signed up
   */
-  public userRegistration(userDetails: any): Observable<any> {
-    console.log(userDetails);
-
-    //make a POST request to the user registration endpoint
+ //api call for user endpoint
+ public userRegistrationService(userData: any): Observable<any> {
+  console.log(userData);
+  //make a POST request to the user registration endpoint
     return this.http
-    .post(apiUrl + '/users', userDetails)
-    .pipe(catchError(this.handleError)
-    );
-  }
+      .post(apiUrl + 'users', userData)
+      .pipe(catchError(this.handleError), map(this.extractResponseData));
+
+}
 
   // User login endpoint
   /**
    * Function to login a user
-   * @param userDetails 
+   * @param userData
    * @returns thi user logged in
    */
-  public userLogin(userDetails: any): Observable<any> {
+  public userLoginService(userData: any): Observable<any> {
     return this.http
-    .post(apiUrl + 'login', userDetails).pipe(
-      catchError(this.handleError)
-    );
-  }
+    .post(apiUrl + 'login', userData, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    })
+    .pipe(map(this.extractResponseData), catchError(this.handleError));
+}
+
   
   //Get all movies endpoint
 /**
@@ -216,21 +201,22 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
   //edit user endpoint
   /**
    * Function to edit user
-   * @param userDetails 
+   * @param userData 
    * @param username
    * @returns this user edited
    */
-  public editUser(userDetails: any): Observable<any> {
+  public updateUser(userData: any): Observable<any> {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    console.log('User details:', userDetails);
+    console.log('User details:', userData);
     console.log('Stored user:', user);
    
-    return this.http.put(`${apiUrl}users/${user.Username}`, userDetails, {
+    return this.http
+    .put(`${apiUrl}users/${user.Username}`, userData, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
-    }).pipe(
+    }).pipe(map(this.extractResponseData),
       catchError(this.handleError)
     );
   }
@@ -241,22 +227,52 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
    * @param username
    * @returns this user deleted
    */
-  public deleteUser(username:String): Observable<any> {
+  public deleteUser(username: any): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.delete(`${apiUrl}users/${username}`,
 
-      { headers: new HttpHeaders({
-        Authorization: 'Bearer ' + token,
+    if (!token) {
+      return throwError(() => new Error('No authentication token found'));
+    }
+  
+    console.log(`Deleting user: ${username}`);
+    console.log(`Token: ${token}`);
+  
+    return this.http
+      .delete(`${apiUrl}users/profile/${username}`, {
+        headers: new HttpHeaders({
+          Authorization: 'Bearer ' + token,
+        })
       })
-    }).pipe(
-      map(this.extractResponseData), catchError(this.handleError)
-    );
+      .pipe(
+        map(this.extractResponseData),
+        catchError((error) => {
+          if (error.status === 401) {
+            console.error('Unauthorized: Token may be invalid or expired');
+            // Optionally, clear token and redirect to login
+            // localStorage.removeItem('token');
+            // this.router.navigate(['/login']);
+          }
+          return this.handleError(error);
+        })
+      );
   }
-
+  
   // Non-typed response extraction
   private extractResponseData(res: any): any {
     const body = res;
     return body || { };
 }
+
+private handleError(error: HttpErrorResponse): any {
+  if (error.error instanceof ErrorEvent) {
+    console.error('Some error Occurred:', error.error.message);
+  } else {
+    console.error(
+      `Error Status code ${error.status}, ` + `Error body is: ${error.error}`
+    );
+  }
+  return throwError('Something bad happenened; please try again later.');
 }
+}
+
 

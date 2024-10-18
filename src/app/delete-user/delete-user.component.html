@@ -1,9 +1,11 @@
 
-<h2 mat-dialog-title class="messageboxtitle">Delete User</h2>
-<div mat-dialog-content class="messageboxcontent">Are you sure you want to delete your account?</div>
-<div mat-dialog-actions>
-  <button  mat-raised-button (click)="dialogRef.close(false)" color="secondary" >Cancel</button>
-  <button  mat-raised-button (click)="dialogRef.close(true)" color="secondary">Delete</button>
-</div>
+<h2 mat-dialog-title>Confirm Deletion</h2>
+<mat-dialog-content>
+  Are you sure you want to delete your account? This action cannot be undone.
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancelDelete()">Cancel</button>
+  <button mat-button color="warn" (click)="onConfirmDelete()">Delete</button>
+</mat-dialog-actions>
 
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,7 +8,18 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './delete-user.component.html',
   styleUrl: './delete-user.component.scss'
 })
+export class DeleteUserComponent {
+  @Output() confirmDelete = new EventEmitter<void>();
 
-  export class DeleteUserComponent {
-    constructor(public dialogRef: MatDialogRef<DeleteUserComponent>) {}
+  constructor(public dialogRef: MatDialogRef<DeleteUserComponent>) {}
+
+  onConfirmDelete(): void {
+    this.confirmDelete.emit();
+    this.dialogRef.close(true);
   }
+
+  onCancelDelete(): void {
+    this.dialogRef.close(false);
+  }
+}
+

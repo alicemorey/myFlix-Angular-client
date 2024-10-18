@@ -10,8 +10,8 @@ exports.MovieCardComponent = void 0;
 var core_1 = require("@angular/core");
 var message_box_component_1 = require("../message-box/message-box.component");
 var MovieCardComponent = /** @class */ (function () {
-    function MovieCardComponent(fetchApiData, router, dialog, snackBar) {
-        this.fetchApiData = fetchApiData;
+    function MovieCardComponent(FetchApiDataService, router, dialog, snackBar) {
+        this.FetchApiDataService = FetchApiDataService;
         this.router = router;
         this.dialog = dialog;
         this.snackBar = snackBar;
@@ -26,7 +26,7 @@ var MovieCardComponent = /** @class */ (function () {
      */
     MovieCardComponent.prototype.getMovies = function () {
         var _this = this;
-        this.fetchApiData.getAllMovies().subscribe(function (resp) {
+        this.FetchApiDataService.getAllMovies().subscribe(function (resp) {
             console.log('Movies received:', resp);
             _this.movies = resp;
             var user = JSON.parse(localStorage.getItem("user") || "");
@@ -48,7 +48,7 @@ var MovieCardComponent = /** @class */ (function () {
         var user = JSON.parse(localStorage.getItem('user') || '{}');
         console.log('user', user);
         console.log('Movie ID:', movieId);
-        this.fetchApiData
+        this.FetchApiDataService
             .addFavoriteMovies(user.Username, movieId)
             .subscribe(function (res) {
             console.log('Movie added to favorites', res);
@@ -106,7 +106,7 @@ var MovieCardComponent = /** @class */ (function () {
         this.dialog.open(message_box_component_1.MessageBoxComponent, {
             data: {
                 title: movie.Director.Name,
-                content: "Bio: " + movie.Director.Bio + "\nBirth: " + movie.Director.Birth
+                content: "Bio: " + movie.Director.Bio + "Birth: " + movie.Director.Birth
             },
             width: '350px'
         });

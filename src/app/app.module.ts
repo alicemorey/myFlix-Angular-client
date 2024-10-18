@@ -25,6 +25,7 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { MessageBoxComponent } from './message-box/message-box.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { DeleteUserComponent } from './delete-user/delete-user.component';
 
 const appRoutes: Routes =[
   {path: 'welcome', component: WelcomePageComponent},
@@ -42,7 +43,8 @@ const appRoutes: Routes =[
     MovieCardComponent, 
     WelcomePageComponent,
     UserProfileComponent, 
-    MessageBoxComponent
+    MessageBoxComponent,
+    DeleteUserComponent
 ],
 
   imports: [

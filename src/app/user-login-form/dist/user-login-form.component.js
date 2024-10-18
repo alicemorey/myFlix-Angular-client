@@ -9,8 +9,8 @@ exports.__esModule = true;
 exports.UserLoginFormComponent = void 0;
 var core_1 = require("@angular/core");
 var UserLoginFormComponent = /** @class */ (function () {
-    function UserLoginFormComponent(fetchApiData, dialogRef, snackBar, router) {
-        this.fetchApiData = fetchApiData;
+    function UserLoginFormComponent(FetchApiDataService, dialogRef, snackBar, router) {
+        this.FetchApiDataService = FetchApiDataService;
         this.dialogRef = dialogRef;
         this.snackBar = snackBar;
         this.router = router;
@@ -23,19 +23,18 @@ var UserLoginFormComponent = /** @class */ (function () {
      */
     UserLoginFormComponent.prototype.loginUser = function () {
         var _this = this;
-        this.fetchApiData.userLogin(this.userData).subscribe(function (result) {
-            _this.dialogRef.close(); // This will close the modal on success!
+        this.FetchApiDataService.userLoginService(this.userData).subscribe(function (result) {
             console.log(result);
-            //store user and token in localStorage
-            localStorage.setItem('user', JSON.stringify(result.user));
-            localStorage.setItem('token', result.token);
+            _this.dialogRef.close();
             _this.snackBar.open('user logged in successfully!', 'OK', {
                 duration: 2000
             });
+            //store user and token in localStorage
+            localStorage.setItem('user', JSON.stringify(result.user));
+            localStorage.setItem('token', result.token);
             _this.router.navigate(['movies']);
         }, function (error) {
-            console.log(error);
-            _this.snackBar.open(error, 'OK', {
+            _this.snackBar.open(error, 'NOT OK', {
                 duration: 2000
             });
         });

@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { UserRegistrationService } from '../fetch-api-data.service'
+import { FetchApiDataService } from '../fetch-api-data.service'
 import { MatDialog } from '@angular/material/dialog';
 
 import { MessageBoxComponent } from '../message-box/message-box.component';
@@ -17,7 +17,7 @@ export class MovieCardComponent {
   movies: any[] = [];
 
   constructor(
-    public fetchApiData:UserRegistrationService,
+    public FetchApiDataService: FetchApiDataService,
     public router:Router,
     public dialog:MatDialog,
     public snackBar:MatSnackBar
@@ -32,7 +32,7 @@ ngOnInit(): void {
  * @returns array holding all movies
  */
 getMovies(): void {
-  this.fetchApiData.getAllMovies().subscribe((resp: any) => {
+  this.FetchApiDataService.getAllMovies().subscribe((resp: any) => {
     console.log('Movies received:', resp);  
     this.movies = resp;
 
@@ -56,7 +56,7 @@ getMovies(): void {
     console.log('user', user);
     console.log('Movie ID:', movieId);
     
-    this.fetchApiData
+    this.FetchApiDataService
       .addFavoriteMovies(user.Username, movieId)
       .subscribe((res: any) => {
         console.log('Movie added to favorites', res);
@@ -124,7 +124,7 @@ openDirectorDialog(movie: any): void {
   this.dialog.open(MessageBoxComponent, {
     data: {
       title: movie.Director.Name,
-      content: `Bio: ${movie.Director.Bio}\nBirth: ${movie.Director.Birth}`
+      content: `Bio: ${movie.Director.Bio}\Birth: ${movie.Director.Birth}`
     },
     width: '350px'
   });
