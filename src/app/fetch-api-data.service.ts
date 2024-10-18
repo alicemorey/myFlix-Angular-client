@@ -238,7 +238,7 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
     console.log(`Token: ${token}`);
   
     return this.http
-      .delete(`${apiUrl}users/profile/${username}`, {
+      .delete(`${apiUrl}users/${username}`, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         })

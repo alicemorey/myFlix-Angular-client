@@ -226,12 +226,7 @@ openSynopsisDialog(movie:any): void {
     deleteComponent.confirmDelete.subscribe(() => {
     this.deleteUser();
     });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      if (result=== true) {
-        this.deleteUser();
-      }
-    });
+
   }
   
   deleteUser(): void {

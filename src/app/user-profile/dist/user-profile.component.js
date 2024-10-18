@@ -204,11 +204,6 @@ var UserProfileComponent = /** @class */ (function () {
         deleteComponent.confirmDelete.subscribe(function () {
             _this.deleteUser();
         });
-        dialogRef.afterClosed().subscribe(function (result) {
-            if (result === true) {
-                _this.deleteUser();
-            }
-        });
     };
     UserProfileComponent.prototype.deleteUser = function () {
         var _this = this;

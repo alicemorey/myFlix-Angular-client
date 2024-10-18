@@ -199,7 +199,7 @@ var FetchApiDataService = /** @class */ (function () {
         }
         console.log("Deleting user: " + username);
         console.log("Token: " + token);
-        return this.http["delete"](apiUrl + "users/profile/" + username, {
+        return this.http["delete"](apiUrl + "users/" + username, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })
