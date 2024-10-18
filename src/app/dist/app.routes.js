@@ -9,7 +9,10 @@ exports.__esModule = true;
 exports.AppRoutingModule = void 0;
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
-var routes = [];
+var welcome_page_component_1 = require("./welcome-page/welcome-page.component");
+var routes = [
+    { path: '', component: welcome_page_component_1.WelcomePageComponent },
+];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
     }
