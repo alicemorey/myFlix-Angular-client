@@ -229,7 +229,6 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
    */
   public deleteUser(username: any): Observable<any> {
     const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');// Retrieve user from localStorage
 
     if (!token) {
       return throwError(() => new Error('No authentication token found'));
@@ -246,7 +245,7 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
       })
       .pipe(
         map(this.extractResponseData),
-        catchError((error) => {
+        catchError((error: HttpErrorResponse) => {
           if (error.status === 401) {
             console.error('Unauthorized: Token may be invalid or expired');
             // Optionally, clear token and redirect to login
