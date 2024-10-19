@@ -194,6 +194,7 @@ var FetchApiDataService = /** @class */ (function () {
     FetchApiDataService.prototype.deleteUser = function (username) {
         var _this = this;
         var token = localStorage.getItem('token');
+        var user = JSON.parse(localStorage.getItem('user') || '{}'); // Retrieve user from localStorage
         if (!token) {
             return rxjs_1.throwError(function () { return new Error('No authentication token found'); });
         }

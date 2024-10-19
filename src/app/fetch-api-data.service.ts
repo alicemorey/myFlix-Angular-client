@@ -229,6 +229,7 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
    */
   public deleteUser(username: any): Observable<any> {
     const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');// Retrieve user from localStorage
 
     if (!token) {
       return throwError(() => new Error('No authentication token found'));
