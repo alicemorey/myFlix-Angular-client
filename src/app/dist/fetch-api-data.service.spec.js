@@ -6,7 +6,7 @@ describe('FetchApiDataService', function () {
     var service;
     beforeEach(function () {
         testing_1.TestBed.configureTestingModule({});
-        service = testing_1.TestBed.inject(fetch_api_data_service_1.UserRegistrationService);
+        service = testing_1.TestBed.inject(fetch_api_data_service_1.FetchApiDataService);
     });
     it('should be created', function () {
         expect(service).toBeTruthy();
