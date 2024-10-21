@@ -2,6 +2,7 @@
 import { FetchApiDataService } from '../fetch-api-data.service';
 
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,11 +18,11 @@ import { DeleteUserComponent } from '../delete-user/delete-user.component';
 
 export class UserProfileComponent implements OnInit {
   userData: any = {
-    username: '',
-    password: '',
-    email: '',
-    birthday: ''
+    Username: '',
+    Email: '',
+    Birthday: ''
   };
+
   movies: any[] = [];
   user: any = {};
   favorites: any[] = [];
@@ -34,6 +35,7 @@ export class UserProfileComponent implements OnInit {
     public snackBar: MatSnackBar,
     public fetchUsers: FetchApiDataService,
     private dialog: MatDialog,
+    private formBuilder: FormBuilder,
   
   ) {
 
@@ -82,17 +84,22 @@ updateUser(): void {
   this.fetchApiData.updateUser(this.userData).subscribe({
     next: (res: any) => {
     console.log('Update successful:', res);
-    this.userData = {
+    const updatedUser = {
       ...res,
-      id: res._id,
-      password: this.userData.password,
-      token: this.userData.token
+      token: JSON.parse(localStorage.getItem('user') || '{}').token
     };
       this.snackBar.open('User profile updated successfully', 'OK', {
         duration: 2000
-      });
-      localStorage.setItem('user', JSON.stringify(this.userData));
-      this.getFavoriteMovies(); // refresh user data
+    });
+
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    this.getFavoriteMovies(); 
+    // refresh user data
+    this.userData = {
+      Username:'',
+      Email:'',
+      Birthday:''
+      };
     },
     error: (error) => {
       this.snackBar.open('Failed to update user profile', 'OK', {
@@ -107,18 +114,6 @@ resetUser(): void {
   this.user = JSON.parse(localStorage.getItem("user") || "{}");
 }
 
-/**
-showGenreAlert(genre: any): void {
-  alert(genre);
-}
-
-showDirectorAlert(director: any): void {
-  alert(director);
-}
-
-showSynopsisAlert(synopsis: any): void {
-  alert(synopsis);
-} */
 
 /**
  * Function to open a dialog box with movie details on genre
@@ -133,7 +128,6 @@ openGenreDialog(genre: string): void {
     width: '350px'
   });
 }
-
 
 
 /**
@@ -163,9 +157,6 @@ openSynopsisDialog(movie:any): void {
     width: '350px'
   });
 }
-
-
- 
 
 
   /**
@@ -230,17 +221,23 @@ openSynopsisDialog(movie:any): void {
   }
   
   deleteUser(): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    console.log('Deleting user:', user);
-
-    this.fetchApiData.deleteUser(user.Username).subscribe({
-      next:() => {
-        console.log('User deleted successfully');
-        localStorage.clear();
-        this.router.navigate(['/welcome']);
+    console.log('Deleting user:', this.userData);
+    this.fetchApiData.deleteUser(this.userData).subscribe({
+    next: (res:any) => {
+        console.log('User deleted successfully', res);
+        const deletedUser = {
+          ...res,
+          token: JSON.parse(localStorage.getItem('user') || '{}').token
+        };
         this.snackBar.open('User deleted successfully', 'OK', {
         duration: 2000
       });
+      localStorage.setItem('user', JSON.stringify(deletedUser));
+      this.userData = {
+        Username:'',
+        Email:'',
+        Birthday:''
+        };
     },
     error: (error) => {
       console.error('Error deleting user:', error);

@@ -22,17 +22,17 @@ var core_1 = require("@angular/core");
 var message_box_component_1 = require("../message-box/message-box.component");
 var delete_user_component_1 = require("../delete-user/delete-user.component");
 var UserProfileComponent = /** @class */ (function () {
-    function UserProfileComponent(fetchApiData, router, snackBar, fetchUsers, dialog) {
+    function UserProfileComponent(fetchApiData, router, snackBar, fetchUsers, dialog, formBuilder) {
         this.fetchApiData = fetchApiData;
         this.router = router;
         this.snackBar = snackBar;
         this.fetchUsers = fetchUsers;
         this.dialog = dialog;
+        this.formBuilder = formBuilder;
         this.userData = {
-            username: '',
-            password: '',
-            email: '',
-            birthday: ''
+            Username: '',
+            Email: '',
+            Birthday: ''
         };
         this.movies = [];
         this.user = {};
@@ -80,12 +80,18 @@ var UserProfileComponent = /** @class */ (function () {
         this.fetchApiData.updateUser(this.userData).subscribe({
             next: function (res) {
                 console.log('Update successful:', res);
-                _this.userData = __assign(__assign({}, res), { id: res._id, password: _this.userData.password, token: _this.userData.token });
+                var updatedUser = __assign(__assign({}, res), { token: JSON.parse(localStorage.getItem('user') || '{}').token });
                 _this.snackBar.open('User profile updated successfully', 'OK', {
                     duration: 2000
                 });
-                localStorage.setItem('user', JSON.stringify(_this.userData));
-                _this.getFavoriteMovies(); // refresh user data
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                _this.getFavoriteMovies();
+                // refresh user data
+                _this.userData = {
+                    Username: '',
+                    Email: '',
+                    Birthday: ''
+                };
             },
             error: function (error) {
                 _this.snackBar.open('Failed to update user profile', 'OK', {
@@ -98,18 +104,6 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.resetUser = function () {
         this.user = JSON.parse(localStorage.getItem("user") || "{}");
     };
-    /**
-    showGenreAlert(genre: any): void {
-      alert(genre);
-    }
-    
-    showDirectorAlert(director: any): void {
-      alert(director);
-    }
-    
-    showSynopsisAlert(synopsis: any): void {
-      alert(synopsis);
-    } */
     /**
      * Function to open a dialog box with movie details on genre
      * @param genre
@@ -207,16 +201,20 @@ var UserProfileComponent = /** @class */ (function () {
     };
     UserProfileComponent.prototype.deleteUser = function () {
         var _this = this;
-        var user = JSON.parse(localStorage.getItem('user') || '{}');
-        console.log('Deleting user:', user);
-        this.fetchApiData.deleteUser(user.Username).subscribe({
-            next: function () {
-                console.log('User deleted successfully');
-                localStorage.clear();
-                _this.router.navigate(['/welcome']);
+        console.log('Deleting user:', this.userData);
+        this.fetchApiData.deleteUser(this.userData).subscribe({
+            next: function (res) {
+                console.log('User deleted successfully', res);
+                var deletedUser = __assign(__assign({}, res), { token: JSON.parse(localStorage.getItem('user') || '{}').token });
                 _this.snackBar.open('User deleted successfully', 'OK', {
                     duration: 2000
                 });
+                localStorage.setItem('user', JSON.stringify(deletedUser));
+                _this.userData = {
+                    Username: '',
+                    Email: '',
+                    Birthday: ''
+                };
             },
             error: function (error) {
                 console.error('Error deleting user:', error);
