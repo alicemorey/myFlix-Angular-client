@@ -227,18 +227,19 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
    * @param username
    * @returns this user deleted
    */
-  public deleteUser(userId: string): Observable<any> {
+  /** 
+  public deleteUser(username: string): Observable<any> {
     const token = localStorage.getItem('token');
 
     if (!token) {
       return throwError(() => new Error('No authentication token found'));
     }
   
-    console.log(`Deleting user: ${userId}`);
+    console.log(`Deleting user: ${username}`);
     console.log(`Token: ${token}`);
   
     return this.http
-      .delete(`${apiUrl}users/${userId}`, {
+      .delete(`${apiUrl}users/${username}`, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         })
@@ -256,6 +257,7 @@ public addFavoriteMovies(username: string, movieId: string): Observable<any> {
         })
       );
   }
+      */
   
   // Non-typed response extraction
   private extractResponseData(res: any): any {

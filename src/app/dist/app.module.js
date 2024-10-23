@@ -30,7 +30,6 @@ var welcome_page_component_1 = require("./welcome-page/welcome-page.component");
 var user_profile_component_1 = require("./user-profile/user-profile.component");
 var message_box_component_1 = require("./message-box/message-box.component");
 var async_1 = require("@angular/platform-browser/animations/async");
-var delete_user_component_1 = require("./delete-user/delete-user.component");
 var appRoutes = [
     { path: 'welcome', component: welcome_page_component_1.WelcomePageComponent },
     { path: 'movies', component: movie_card_component_1.MovieCardComponent },
@@ -50,7 +49,6 @@ var AppModule = /** @class */ (function () {
                 welcome_page_component_1.WelcomePageComponent,
                 user_profile_component_1.UserProfileComponent,
                 message_box_component_1.MessageBoxComponent,
-                delete_user_component_1.DeleteUserComponent
             ],
             imports: [
                 platform_browser_1.BrowserModule,

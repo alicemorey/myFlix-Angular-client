@@ -14,19 +14,14 @@ export class DeleteUserComponent {
   constructor(
     public dialogRef: MatDialogRef<DeleteUserComponent>, 
     private FetchApiDataService: FetchApiDataService,
-    @Inject(MAT_DIALOG_DATA) public data: { user: any }  // Receive user data
+    @Inject(MAT_DIALOG_DATA) public data:any  // Receive user data
   ){}
 
   onConfirmDelete(): void {
-    if (!this.data || !this.data.user) {
-      console.error('User data is missing!');
-      return;
-    }
+    const Username = this.data.Username;
 
-    console.log('User object:', this.data.user.userId);  // Check what is being passed
-  
     //process the deleted data herer
-    this.FetchApiDataService.deleteUser(this.data.user.userId).subscribe({
+    this.FetchApiDataService.deleteUser(Username).subscribe({
       next:()=>{
         console.log('User deleted successfully');
         this.confirmDelete.emit();

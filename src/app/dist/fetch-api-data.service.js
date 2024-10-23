@@ -191,29 +191,37 @@ var FetchApiDataService = /** @class */ (function () {
      * @param username
      * @returns this user deleted
      */
-    FetchApiDataService.prototype.deleteUser = function (userId) {
-        var _this = this;
-        var token = localStorage.getItem('token');
-        if (!token) {
-            return rxjs_1.throwError(function () { return new Error('No authentication token found'); });
-        }
-        console.log("Deleting user: " + userId);
-        console.log("Token: " + token);
-        return this.http["delete"](apiUrl + "users/" + userId, {
-            headers: new http_1.HttpHeaders({
-                Authorization: 'Bearer ' + token
-            })
+    /**
+    public deleteUser(username: string): Observable<any> {
+      const token = localStorage.getItem('token');
+  
+      if (!token) {
+        return throwError(() => new Error('No authentication token found'));
+      }
+    
+      console.log(`Deleting user: ${username}`);
+      console.log(`Token: ${token}`);
+    
+      return this.http
+        .delete(`${apiUrl}users/${username}`, {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + token,
+          })
         })
-            .pipe(operators_1.map(this.extractResponseData), rxjs_1.catchError(function (error) {
+        .pipe(
+          map(this.extractResponseData),
+          catchError((error: HttpErrorResponse) => {
             if (error.status === 401) {
-                console.error('Unauthorized: Token may be invalid or expired');
-                // Optionally, clear token and redirect to login
-                // localStorage.removeItem('token');
-                // this.router.navigate(['/login']);
+              console.error('Unauthorized: Token may be invalid or expired');
+              // Optionally, clear token and redirect to login
+              // localStorage.removeItem('token');
+              // this.router.navigate(['/login']);
             }
-            return _this.handleError(error);
-        }));
-    };
+            return this.handleError(error);
+          })
+        );
+    }
+        */
     // Non-typed response extraction
     FetchApiDataService.prototype.extractResponseData = function (res) {
         var body = res;

@@ -20,7 +20,6 @@ exports.__esModule = true;
 exports.UserProfileComponent = void 0;
 var core_1 = require("@angular/core");
 var message_box_component_1 = require("../message-box/message-box.component");
-var delete_user_component_1 = require("../delete-user/delete-user.component");
 var UserProfileComponent = /** @class */ (function () {
     function UserProfileComponent(fetchApiData, router, snackBar, fetchUsers, dialog, formBuilder) {
         this.fetchApiData = fetchApiData;
@@ -189,42 +188,52 @@ var UserProfileComponent = /** @class */ (function () {
      *
     */
     //opens a dialog box to confirm deletion of user
-    UserProfileComponent.prototype.openDeleteUserDialog = function () {
-        var _this = this;
-        var dialogRef = this.dialog.open(delete_user_component_1.DeleteUserComponent, {
-            width: '300px',
-            data: { user: this.userData }
-        });
-        dialogRef.componentInstance.confirmDelete.subscribe(function () {
-            // Call deleteUser with the user ID from the dialog data
-            _this.deleteUser(dialogRef.componentInstance.data.user.id); // Assuming userData has an id property
-        });
-    };
-    UserProfileComponent.prototype.deleteUser = function (userId) {
-        var _this = this;
-        console.log('Deleting user:', userId);
-        this.fetchApiData.deleteUser(userId).subscribe({
-            next: function (res) {
-                console.log('User deleted successfully', res);
-                var deletedUser = __assign(__assign({}, res), { token: JSON.parse(localStorage.getItem('user') || '{}').token });
-                _this.snackBar.open('User deleted successfully', 'OK', {
-                    duration: 2000
-                });
-                localStorage.setItem('user', JSON.stringify(deletedUser));
-                _this.userData = {
-                    Username: '',
-                    Email: '',
-                    Birthday: ''
-                };
-            },
-            error: function (error) {
-                console.error('Error deleting user:', error);
-                _this.snackBar.open('Failed to delete user', 'OK', {
-                    duration: 2000
-                });
-            }
-        });
-    };
+    /** openDeleteUserDialog(): void {
+       const dialogRef = this.dialog.open(DeleteUserComponent, {
+         width: '300px',
+         data: {
+           Username:this.userData.Username
+         }
+       });
+       
+       dialogRef.componentInstance.confirmDelete.subscribe(() => {
+         // Call deleteUser with the user ID from the dialog data
+         this.deleteUser(dialogRef.componentInstance.data.Username); // Assuming userData has an id property
+       });
+   
+     }
+     
+     deleteUser(username:string): void {
+       console.log('Deleting user:', username);
+   
+       this.fetchApiData.deleteUser(username).subscribe({
+       next: (res:any) => {
+           console.log('User deleted successfully', res);
+   
+           const deletedUser = {
+             ...res,
+             token: JSON.parse(localStorage.getItem('user') || '{}').token
+           };
+           this.snackBar.open('User deleted successfully', 'OK', {
+           duration: 2000
+         });
+   
+         localStorage.setItem('user', JSON.stringify(deletedUser));
+         this.userData = {
+           Username:'',
+           Email:'',
+           Birthday:''
+           };
+       },
+       error: (error) => {
+         console.error('Error deleting user:', error);
+         this.snackBar.open('Failed to delete user', 'OK', {
+           duration: 2000
+         });
+       }
+     });
+     }
+     */
     /**
      * Function to log out the user
      */

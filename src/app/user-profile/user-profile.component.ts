@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageBoxComponent } from '../message-box/message-box.component';
-import { DeleteUserComponent } from '../delete-user/delete-user.component';
+
+import { UserRegistrationFormComponent } from '../user-registration-form/user-registration-form.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -208,24 +209,28 @@ openSynopsisDialog(movie:any): void {
    * 
   */
  //opens a dialog box to confirm deletion of user
-  openDeleteUserDialog(): void {
+ /** openDeleteUserDialog(): void {
     const dialogRef = this.dialog.open(DeleteUserComponent, {
       width: '300px',
-      data:{user:this.userData}
+      data: {
+        Username:this.userData.Username
+      }
     });
     
     dialogRef.componentInstance.confirmDelete.subscribe(() => {
       // Call deleteUser with the user ID from the dialog data
-      this.deleteUser(dialogRef.componentInstance.data.user.id); // Assuming userData has an id property
+      this.deleteUser(dialogRef.componentInstance.data.Username); // Assuming userData has an id property
     });
 
   }
   
-  deleteUser(userId:string): void {
-    console.log('Deleting user:', userId);
-    this.fetchApiData.deleteUser(userId).subscribe({
+  deleteUser(username:string): void {
+    console.log('Deleting user:', username);
+
+    this.fetchApiData.deleteUser(username).subscribe({
     next: (res:any) => {
         console.log('User deleted successfully', res);
+
         const deletedUser = {
           ...res,
           token: JSON.parse(localStorage.getItem('user') || '{}').token
@@ -233,6 +238,7 @@ openSynopsisDialog(movie:any): void {
         this.snackBar.open('User deleted successfully', 'OK', {
         duration: 2000
       });
+
       localStorage.setItem('user', JSON.stringify(deletedUser));
       this.userData = {
         Username:'',
@@ -248,6 +254,7 @@ openSynopsisDialog(movie:any): void {
     }
   });
   }
+  */ 
 
 
   /**

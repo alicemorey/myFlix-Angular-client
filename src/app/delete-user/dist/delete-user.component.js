@@ -22,13 +22,9 @@ var DeleteUserComponent = /** @class */ (function () {
     }
     DeleteUserComponent.prototype.onConfirmDelete = function () {
         var _this = this;
-        if (!this.data || !this.data.user) {
-            console.error('User data is missing!');
-            return;
-        }
-        console.log('User object:', this.data.user.userId); // Check what is being passed
+        var Username = this.data.Username;
         //process the deleted data herer
-        this.FetchApiDataService.deleteUser(this.data.user.userId).subscribe({
+        this.FetchApiDataService.deleteUser(Username).subscribe({
             next: function () {
                 console.log('User deleted successfully');
                 _this.confirmDelete.emit();
