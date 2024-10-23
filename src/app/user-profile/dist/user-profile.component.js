@@ -193,7 +193,7 @@ var UserProfileComponent = /** @class */ (function () {
         var _this = this;
         var dialogRef = this.dialog.open(delete_user_component_1.DeleteUserComponent, {
             width: '300px',
-            data: { userId: this.userData }
+            data: { user: this.userData }
         });
         dialogRef.componentInstance.confirmDelete.subscribe(function () {
             // Call deleteUser with the user ID from the dialog data

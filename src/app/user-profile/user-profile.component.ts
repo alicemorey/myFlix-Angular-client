@@ -211,7 +211,7 @@ openSynopsisDialog(movie:any): void {
   openDeleteUserDialog(): void {
     const dialogRef = this.dialog.open(DeleteUserComponent, {
       width: '300px',
-      data:{userId:this.userData}
+      data:{user:this.userData}
     });
     
     dialogRef.componentInstance.confirmDelete.subscribe(() => {
