@@ -192,17 +192,18 @@ var UserProfileComponent = /** @class */ (function () {
     UserProfileComponent.prototype.openDeleteUserDialog = function () {
         var _this = this;
         var dialogRef = this.dialog.open(delete_user_component_1.DeleteUserComponent, {
-            width: '300px'
+            width: '300px',
+            data: { userId: this.userData }
         });
-        var deleteComponent = dialogRef.componentInstance;
-        deleteComponent.confirmDelete.subscribe(function () {
-            _this.deleteUser();
+        dialogRef.componentInstance.confirmDelete.subscribe(function () {
+            // Call deleteUser with the user ID from the dialog data
+            _this.deleteUser(dialogRef.componentInstance.data.user.id); // Assuming userData has an id property
         });
     };
-    UserProfileComponent.prototype.deleteUser = function () {
+    UserProfileComponent.prototype.deleteUser = function (userId) {
         var _this = this;
-        console.log('Deleting user:', this.userData);
-        this.fetchApiData.deleteUser(this.userData).subscribe({
+        console.log('Deleting user:', userId);
+        this.fetchApiData.deleteUser(userId).subscribe({
             next: function (res) {
                 console.log('User deleted successfully', res);
                 var deletedUser = __assign(__assign({}, res), { token: JSON.parse(localStorage.getItem('user') || '{}').token });

@@ -1,10 +1,10 @@
 
-<mat-card>
+<mat-card *ngIf="data?.user">
   <mat-card-header>
 <mat-card-title> Confirm Deletion</mat-card-title>
 </mat-card-header>
 <mat-dialog-content>
-  Are you sure you want to delete your account? This action cannot be undone.
+  Are you sure you want to delete your account?, {{ data.user.userId }} ?This action cannot be undone.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onCancelDelete()">Cancel</button>

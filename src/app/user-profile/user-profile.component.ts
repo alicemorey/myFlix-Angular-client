@@ -211,18 +211,19 @@ openSynopsisDialog(movie:any): void {
   openDeleteUserDialog(): void {
     const dialogRef = this.dialog.open(DeleteUserComponent, {
       width: '300px',
+      data:{userId:this.userData}
     });
-
-    const deleteComponent = dialogRef.componentInstance;
-    deleteComponent.confirmDelete.subscribe(() => {
-    this.deleteUser();
+    
+    dialogRef.componentInstance.confirmDelete.subscribe(() => {
+      // Call deleteUser with the user ID from the dialog data
+      this.deleteUser(dialogRef.componentInstance.data.user.id); // Assuming userData has an id property
     });
 
   }
   
-  deleteUser(): void {
-    console.log('Deleting user:', this.userData);
-    this.fetchApiData.deleteUser(this.userData).subscribe({
+  deleteUser(userId:string): void {
+    console.log('Deleting user:', userId);
+    this.fetchApiData.deleteUser(userId).subscribe({
     next: (res:any) => {
         console.log('User deleted successfully', res);
         const deletedUser = {

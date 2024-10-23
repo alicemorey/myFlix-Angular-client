@@ -191,15 +191,15 @@ var FetchApiDataService = /** @class */ (function () {
      * @param username
      * @returns this user deleted
      */
-    FetchApiDataService.prototype.deleteUser = function (Username) {
+    FetchApiDataService.prototype.deleteUser = function (userId) {
         var _this = this;
         var token = localStorage.getItem('token');
         if (!token) {
             return rxjs_1.throwError(function () { return new Error('No authentication token found'); });
         }
-        console.log("Deleting user: " + Username);
+        console.log("Deleting user: " + userId);
         console.log("Token: " + token);
-        return this.http["delete"](apiUrl + "users/" + Username, {
+        return this.http["delete"](apiUrl + "users/" + userId, {
             headers: new http_1.HttpHeaders({
                 Authorization: 'Bearer ' + token
             })
